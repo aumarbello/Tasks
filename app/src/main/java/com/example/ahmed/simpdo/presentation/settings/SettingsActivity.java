@@ -108,7 +108,10 @@ public class SettingsActivity extends PreferenceCompat {
 
     private static void sendMail(Context context){
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType()
+        intent.setType("message/rfc822");
+        intent.putExtra(Intent.EXTRA_EMAIL, "john@doe.com");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "FeedBack on Tasks App");
+        context.startActivity(Intent.createChooser(intent, "Send FeedBack Mail"));
     }
 
     private static void bindListPreference(Preference preference) {

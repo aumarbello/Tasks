@@ -1,7 +1,5 @@
 package com.example.ahmed.simpdo.presentation.list;
 
-import android.util.Log;
-
 import com.example.ahmed.simpdo.data.db.TaskDAO;
 import com.example.ahmed.simpdo.data.model.Task;
 
@@ -24,9 +22,7 @@ public class TaskListPresenter{
     }
 
     List<Task> getAllTasks(){
-        List<Task> taskList = taskDAO.getAllTasks();
-        Log.d("Presenter", "Got a list with " + taskList.size() + "tasks");
-        return taskList;
+        return taskDAO.getAllTasks();
     }
 
     void deleteTask(Task task) {
@@ -36,7 +32,6 @@ public class TaskListPresenter{
 
     void addTask(Task task){
         taskDAO.addTask(task);
-        Log.d("Presenter", "Added new task");
         fragment.update();
     }
 

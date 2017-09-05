@@ -46,8 +46,10 @@
     <string name="select_color_title">Select Color for Above Day</string>
 
     <string name="about_summary">A Simple ToDo App</string>
+
     <string name="app_version_title">Version</string>
     <string name="app_version_summary">1.0</string>
+
     <string name="contact_developer_key">key_contact_dev</string>
     <string name="contact_developer_title">Contact Developer</string>
     <string name="contact_developer_summary">Got Any Queries? Send Mail to Developer</string>
