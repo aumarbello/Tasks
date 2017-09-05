@@ -39,7 +39,7 @@
     <string name="done_select_color_key">key_select_done_color</string>
     <string name="done_select_color_title">Select Color For Done Tasks</string>
 
-    <string name="g">key_select_day</string>
+    <string name="select_day_key">key_select_day</string>
     <string name="select_day_title">Select Day</string>
 
     <string name="select_color_key">key_select_color</string>

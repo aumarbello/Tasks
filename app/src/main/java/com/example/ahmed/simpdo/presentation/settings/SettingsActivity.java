@@ -1,12 +1,13 @@
 package com.example.ahmed.simpdo.presentation.settings;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.ahmed.simpdo.R;
@@ -16,6 +17,7 @@ import com.example.ahmed.simpdo.R;
  */
 
 public class SettingsActivity extends PreferenceCompat {
+    private static ListPreference daysList;
     private static Preference.OnPreferenceChangeListener
             sBindPreferenceSummaryToValueListener = (preference, value) -> {
         String stringValue = value.toString();
@@ -37,6 +39,7 @@ public class SettingsActivity extends PreferenceCompat {
     private static Preference.OnPreferenceChangeListener
             listListener = (preference, value) -> {
         String stringValue = value.toString();
+        Resources resources = preference.getContext().getResources();
 
         ListPreference listPreference = (ListPreference) preference;
         int index = listPreference.findIndexOfValue(stringValue);
@@ -45,8 +48,28 @@ public class SettingsActivity extends PreferenceCompat {
                 index >= 0
                         ? listPreference.getEntries()[index]
                         : null);
+        int intValue = Integer.parseInt(stringValue);
 
-        Log.d("Settings Activity", "Number of days selected changed to " + stringValue);
+        switch (intValue){
+            case 0:
+                daysList.setEntries(resources.getStringArray(
+                        R.array.three_days_array_entries));
+                daysList.setEntryValues(resources.getStringArray(
+                        R.array.three_days_array_values));
+                break;
+            case 1:
+                daysList.setEntries(resources.getStringArray(
+                        R.array.five_days_array_entries));
+                daysList.setEntryValues(resources.getStringArray(
+                        R.array.five_days_array_values));
+                break;
+            case 2:
+                daysList.setEntries(resources.getStringArray(
+                        R.array.seven_days_array_entries));
+                daysList.setEntryValues(resources.getStringArray(
+                        R.array.seven_days_array_values));
+                break;
+        }
         return true;
     };
 
@@ -84,7 +107,8 @@ public class SettingsActivity extends PreferenceCompat {
     }
 
     private static void sendMail(Context context){
-        //todo intent to send mail
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType()
     }
 
     private static void bindListPreference(Preference preference) {
@@ -96,7 +120,6 @@ public class SettingsActivity extends PreferenceCompat {
     }
 
     public static class GeneralPreferenceFragment extends PreferenceFragment{
-        private static ListPreference daysList;
         private static ListPreference numberList;
 
         @Override
@@ -126,56 +149,6 @@ public class SettingsActivity extends PreferenceCompat {
                 sendMail(getActivity());
                 return true;
             });
-
-//            numberList.setOnPreferenceChangeListener((preference, o) -> {
-//                Context context = preference.getContext();
-//
-//                int intValue = Integer.parseInt(o.toString());
-//
-//                switch (intValue){
-//                    case 3:
-//                        daysList.setEntries(getResources().getStringArray(
-//                                R.array.three_days_array_entries));
-//                        daysList.setEntryValues(getResources().getStringArray(
-//                                R.array.three_days_array_values));
-//                        break;
-//                    case 5:
-//                        daysList.setEntries(getResources().getStringArray(
-//                                R.array.five_days_array_entries));
-//                        daysList.setEntryValues(getResources().getStringArray(
-//                                R.array.five_days_array_values));
-//                        break;
-//                    case 7:
-//                        daysList.setEntries(getResources().getStringArray(
-//                                R.array.seven_days_array_entries));
-//                        daysList.setEntryValues(getResources().getStringArray(
-//                                R.array.seven_days_array_values));
-//                        break;
-//                }
-//                return true;
-//            });
-
-//            SharedPreferences sharedPreferences = PreferenceManager
-//                    .getDefaultSharedPreferences(getActivity());
-//            String value = sharedPreferences.getString(getString
-//                    (R.string.select_day_key), "3");
-//
-//            int intValue = Integer.parseInt(value);
-//
-//            switch (intValue) {
-//                case 3:
-//                    daysList.setEntries(getResources()
-//                            .getStringArray(R.array.three_days_array_entries));
-//                    break;
-//                case 5:
-//                    daysList.setEntries(getResources()
-//                            .getStringArray(R.array.five_days_array_entries));
-//                    break;
-//                case 7:
-//                    daysList.setEntries(getResources()
-//                            .getStringArray(R.array.seven_days_array_entries));
-//                    break;
-//            }
         }
     }
 }
