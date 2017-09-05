@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Tasks</string>
+    <string name="bottom_text">Your simple TODO App</string>
+    <string name="header">Header</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_time">Task\'s Time</string>
+    <string name="isimportant">isImportant</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="delete_task">Delete Task</string>
+    <string name="task_date">Task Date</string>
+    <string name="important">Is Important?</string>
+    <string name="task_description">Task Description</string>
+    <string name="submit">Submit</string>
+    <string name="select_task_category">Select Task Category</string>
+    <string name="okay">OK</string>
+    <string name="save_task">Save Task</string>
+
+    <!--App Setting Strings-->
+    <string name="key_show_previous_tasks">key_show_previous_tasks</string>
+    <string name="previous_tasks_title">Tasks From Previous Days</string>
+    <string name="previous_task_summary">Show Tasks from previous days will be show</string>
+
+    <string name="number_of_days_key">key_number_of_days</string>
+    <string name="number_of_days_title">Number of Day\'s to split tasks into</string>
+    <string name="number_of_days_dialog_title">Select number of Day\'s</string>
+
+    <string name="show_notification_key">key_show_notification</string>
+    <string name="show_notification_title">Select Category to display Notification for</string>
+    <string name="show_notification_dialog_title">Category Notifications</string>
+
+    <string name="days_color_key">key_days_color</string>
+    <string name="days_color_title">Day\'s Task Color</string>
+    <string name="days_color_summary">Select Color for Each Day at random</string>
+
+    <string name="done_color_key">key_done_color</string>
+    <string name="done_color_title">Done Task\'s Color</string>
+    <string name="done_color_summary">Mark Done Task\'s with Icon or Color</string>
+
+    <string name="done_select_color_key">key_select_done_color</string>
+    <string name="done_select_color_title">Select Color For Done Tasks</string>
+
+    <string name="g">key_select_day</string>
+    <string name="select_day_title">Select Day</string>
+
+    <string name="select_color_key">key_select_color</string>
+    <string name="select_color_title">Select Color for Above Day</string>
+
+    <string name="about_summary">A Simple ToDo App</string>
+    <string name="app_version_title">Version</string>
+    <string name="app_version_summary">1.0</string>
+    <string name="contact_developer_key">key_contact_dev</string>
+    <string name="contact_developer_title">Contact Developer</string>
+    <string name="contact_developer_summary">Got Any Queries? Send Mail to Developer</string>
+    <string name="settings">Settings</string>
+</resources>

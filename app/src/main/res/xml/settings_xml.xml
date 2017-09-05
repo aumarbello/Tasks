@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="General">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/key_show_previous_tasks"
+            android:title="@string/previous_tasks_title"
+            android:summary="@string/previous_task_summary"
+            />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/number_of_days_entries"
+            android:entryValues="@array/number_of_days_values"
+            android:key="@string/number_of_days_key"
+            android:dialogTitle="@string/number_of_days_dialog_title"
+            android:title="@string/number_of_days_title"
+            />
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/notification_entries"
+            android:entryValues="@array/notification_values"
+            android:key="@string/show_notification_key"
+            android:dialogTitle="@string/show_notification_dialog_title"
+            android:title="@string/show_notification_title"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Color">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/days_color_key"
+            android:title="@string/days_color_title"
+            android:summary="@string/days_color_summary"
+            />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:key="@string/select_day_key"
+            android:title="@string/select_day_title"
+            android:entries="@array/three_days_array_entries"
+            android:entryValues="@array/three_days_array_values"
+            android:dialogTitle="@string/select_day_title"
+            android:dependency="@string/days_color_key"
+            />
+
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:defaultValue="@color/colorPrimary"
+            android:key="@string/select_color_key"
+            android:title="@string/select_color_title"
+            android:dependency="@string/days_color_key"
+            app:colorShape="circle"
+            app:colorChoices="@array/color_array"
+            app:viewSize="normal"
+            app:numColumns="4"
+            app:showDialog="true"
+            />
+        <!--Color picker preference dependent on the above-->
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/done_color_key"
+            android:title="@string/done_color_title"
+            android:summary="@string/done_color_summary"
+            />
+
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:defaultValue="@color/colorPrimary"
+            android:key="@string/done_select_color_key"
+            android:title="@string/done_select_color_title"
+            android:dependency="@string/done_color_key"
+            app:colorShape="circle"
+            app:colorChoices="@array/color_array"
+            app:viewSize="normal"
+            app:numColumns="4"
+            app:showDialog="true"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="About">
+        <Preference
+            android:selectable="false"
+            android:summary="@string/about_summary"
+            />
+        <Preference
+            android:title="@string/app_version_title"
+            android:summary="@string/app_version_summary"
+            />
+        <Preference
+            android:key="@string/contact_developer_key"
+            android:title="@string/contact_developer_title"
+            android:summary="@string/contact_developer_summary"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>
