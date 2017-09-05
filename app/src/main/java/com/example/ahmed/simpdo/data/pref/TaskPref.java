@@ -19,17 +19,17 @@ public class TaskPref {
     private Resources resources;
 
     @Inject
-    public TaskPref(Context context){
+    TaskPref(Context context){
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         resources = context.getResources();
     }
 
-    public boolean getPreviousTasks(){
+    public boolean isPreviousTaskShown(){
         return sharedPreferences.getBoolean(resources.getString
                 (R.string.key_show_previous_tasks), true);
     }
 
-    public int getKeepDays(){
+    public int getDaysSection(){
         String dayString = sharedPreferences.getString(resources.getString
                 (R.string.number_of_days_key), "3");
         return Integer.parseInt(dayString);

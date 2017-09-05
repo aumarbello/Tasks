@@ -20,11 +20,13 @@ import android.view.ViewGroup;
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.model.Task;
+import com.example.ahmed.simpdo.data.pref.TaskPref;
 import com.example.ahmed.simpdo.presentation.edit.EditTaskFragment;
 import com.example.ahmed.simpdo.presentation.settings.SettingsActivity;
 import com.example.ahmed.simpdo.presentation.view.ViewTaskFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -47,8 +49,11 @@ public class TaskList extends Fragment implements
     @Inject
     TaskListPresenter presenter;
 
+    @Inject
+    TaskPref preferences;
+
     private Unbinder unbinder;
-    private String[] taskSegments;
+    private List<String> taskSegments;
     private SectionedRecyclerViewAdapter adapter;
     private Calendar todayCalender;
     private Calendar taskCalender;
@@ -71,7 +76,26 @@ public class TaskList extends Fragment implements
         setHasOptionsMenu(true);
 
         ((App)getActivity().getApplication()).getComponent().inject(this);
-        taskSegments = new String[]{"Previous", "Today", "Tomorrow", "Others"};
+        int numberOfDaysPref = preferences.getDaysSection();
+        taskSegments = new ArrayList<>();
+        if (preferences.isPreviousTaskShown()){
+            taskSegments.add("Previous");
+        }
+
+        switch (numberOfDaysPref){
+            case 0:
+                taskSegments.addAll(Arrays.asList(getResources()
+                        .getStringArray(R.array.three_days_array_entries)));
+                break;
+            case 1:
+                taskSegments.addAll(Arrays.asList(getResources()
+                        .getStringArray(R.array.five_days_array_entries)));
+                break;
+            case 2:
+                taskSegments.addAll(Arrays.asList(getResources()
+                        .getStringArray(R.array.seven_days_array_entries)));
+                break;
+        }
 
         todayCalender = Calendar.getInstance();
         taskCalender = Calendar.getInstance();
@@ -136,18 +160,18 @@ public class TaskList extends Fragment implements
                     }
                 }
                 return returnList;
-            case "Today":
+            case "Monday":
                 for (Task currentTask : taskList) {
                     int taskDay = currentTask.getTaskDate().get(Calendar.DAY_OF_YEAR);
-                    if (taskDay == day){
+                    if (taskDay == Calendar.MONDAY){
                         returnList.add(currentTask);
                     }
                 }
                 return returnList;
-            case "Tomorrow":
+            case "Tuesday":
                 for (Task currentTask : taskList) {
                     int taskDay = currentTask.getTaskDate().get(Calendar.DAY_OF_YEAR);
-                    if (taskDay == day + 1){
+                    if (taskDay == Calendar.TUESDAY){
                         returnList.add(currentTask);
                     }
                 }
@@ -247,10 +271,19 @@ public class TaskList extends Fragment implements
         task.setTaskDate(taskCalender);
         task.setTaskTitle(title);
         task.setTaskDesc(description);
-        task.setUrgent(category.equals("Important"));
+
+        if (!(category == null)) {
+            task.setUrgent(category.equals("Important"));
+        }
 
         presenter.addTask(task);
     }
+
+//    @Override
+//    public void onStart(){
+//        super.onStart();
+//        update();
+//    }
 
     //update list view
     public void update(){

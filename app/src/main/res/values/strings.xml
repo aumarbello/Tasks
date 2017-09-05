@@ -54,4 +54,6 @@
     <string name="contact_developer_title">Contact Developer</string>
     <string name="contact_developer_summary">Got Any Queries? Send Mail to Developer</string>
     <string name="settings">Settings</string>
+
+    <string name="defaultCategory">Important</string>
 </resources>

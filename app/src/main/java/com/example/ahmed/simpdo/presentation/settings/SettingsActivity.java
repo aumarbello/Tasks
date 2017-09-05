@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import com.example.ahmed.simpdo.R;
+import com.example.ahmed.simpdo.presentation.TaskContainer;
 
 /**
  * Created by ahmed on 9/4/17.
@@ -51,19 +52,19 @@ public class SettingsActivity extends PreferenceCompat {
         int intValue = Integer.parseInt(stringValue);
 
         switch (intValue){
-            case 0:
+            case 3:
                 daysList.setEntries(resources.getStringArray(
                         R.array.three_days_array_entries));
                 daysList.setEntryValues(resources.getStringArray(
                         R.array.three_days_array_values));
                 break;
-            case 1:
+            case 5:
                 daysList.setEntries(resources.getStringArray(
                         R.array.five_days_array_entries));
                 daysList.setEntryValues(resources.getStringArray(
                         R.array.five_days_array_values));
                 break;
-            case 2:
+            case 7:
                 daysList.setEntries(resources.getStringArray(
                         R.array.seven_days_array_entries));
                 daysList.setEntryValues(resources.getStringArray(
@@ -121,6 +122,12 @@ public class SettingsActivity extends PreferenceCompat {
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
     }
+
+//    public void onBackPressed(){
+        //todo create new container for taskList and start the activity here
+//        Intent intent = new Intent(this, TaskContainer.class);
+//        startActivity(intent);
+//    }
 
     public static class GeneralPreferenceFragment extends PreferenceFragment{
         private static ListPreference numberList;

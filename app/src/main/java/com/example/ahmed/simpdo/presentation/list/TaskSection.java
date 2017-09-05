@@ -126,7 +126,7 @@ class TaskSection extends StatelessSection{
 
         void leave(){
             Animation enter = AnimationUtils.loadAnimation(taskListFragment.getActivity(), R.anim.enter_right);
-            itemView.setBackgroundColor(Color.BLUE);
+            itemView.setBackgroundColor(Color.LTGRAY);
             itemView.startAnimation(enter);
         }
 
