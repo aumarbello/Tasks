@@ -31,12 +31,12 @@ public class GetTaskList {
             case 2:
                 return sevenGetTasks(segment, dayString);
         }
-        Log.d(TAG, "Unable to resolve section parameter");
+        Log.d(TAG, "Unable to resolve section parameter " + segment);
         return new ArrayList<>();
     }
 
     private List<Task> threeGetTasks(String segment, List<String> dayString){
-        Log.d(TAG, "Entered get three tasks");
+        Log.d(TAG, "Entered get three tasks " + segment);
         List<Task> returnTasks = new ArrayList<>();
         Calendar today = Calendar.getInstance();
         int currentDay = today.get(Calendar.DAY_OF_YEAR);
@@ -81,7 +81,7 @@ public class GetTaskList {
     }
 
     private List<Task> fiveGetTasks(String segment, List<String> dayString){
-        Log.d(TAG, "Entered get five tasks");
+        Log.d(TAG, "Entered get five tasks " + segment);
         List<Task> returnTasks = new ArrayList<>();
         Calendar today = Calendar.getInstance();
         int currentDay = today.get(Calendar.DAY_OF_YEAR);
@@ -139,7 +139,7 @@ public class GetTaskList {
     }
 
     private List<Task> sevenGetTasks(String segment, List<String> dayString){
-        Log.d(TAG, "Entered get seven tasks");
+        Log.d(TAG, "Entered get seven tasks " + segment);
         List<Task> returnTasks = new ArrayList<>();
         Calendar today = Calendar.getInstance();
         int currentDay = today.get(Calendar.DAY_OF_YEAR);

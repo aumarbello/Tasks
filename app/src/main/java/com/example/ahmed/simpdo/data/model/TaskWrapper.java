@@ -23,12 +23,14 @@ public class TaskWrapper extends CursorWrapper {
         String taskTitle = getString(getColumnIndex(TASK_TITLE));
         String taskDesc = getString(getColumnIndex(TASK_DESC));
         int taskIsUrgent = getInt(getColumnIndex(TASK_IMPORTANT));
+        int taskDone = getInt(getColumnIndex(TASK_DONE));
         long taskDate = getLong(getColumnIndex(TASK_DATE));
 
         Task task = new Task(UUID.fromString(idString));
         task.setTaskTitle(taskTitle);
         task.setTaskDesc(taskDesc);
         task.setUrgent(taskIsUrgent == 0);
+        task.setDone(taskDone == 0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(taskDate);
         task.setTaskDate(calendar);

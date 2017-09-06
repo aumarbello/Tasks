@@ -300,7 +300,7 @@ public class TaskListFragment extends Fragment implements
         for (String segment : taskSegments) {
             List<Task> taskList = getDayTask(segment);
             if (taskList.size() != 0){
-                adapter.addSection(new TaskSection(segment, taskList, this));
+                adapter.addSection(new TaskSection(segment, taskList, this, preferences));
             }
             //todo else show empty view
         }
@@ -326,5 +326,9 @@ public class TaskListFragment extends Fragment implements
         String[] daysOfTheWeek = new String[]{"Sunday", "Monday", "Tuesday", "Wednesday",
                 "Thursday", "Friday", "Saturday"};
         return daysOfTheWeek[day - 1];
+    }
+
+    public void updateTask(Task task) {
+        presenter.updateTask(task);
     }
 }

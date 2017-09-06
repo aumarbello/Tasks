@@ -16,6 +16,7 @@ public class Task implements Serializable{
     private String taskDesc;
     private Calendar taskDate;
     private boolean isUrgent;
+    private boolean isDone;
 
     public Task(){
         taskID = UUID.randomUUID();
@@ -78,5 +79,13 @@ public class Task implements Serializable{
 
     private String category(boolean isUrgent){
         return isUrgent ? "Important" : "Normal";
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 }

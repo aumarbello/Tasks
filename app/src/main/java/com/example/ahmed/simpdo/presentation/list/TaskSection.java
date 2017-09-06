@@ -1,6 +1,5 @@
 package com.example.ahmed.simpdo.presentation.list;
 
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.model.Task;
+import com.example.ahmed.simpdo.data.pref.TaskPref;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -28,7 +28,9 @@ class TaskSection extends StatelessSection{
     private String title;
     private List<Task> taskList;
     private TaskListFragment taskListFragment;
-    TaskSection(String title, List<Task> taskList, TaskListFragment taskListFragment) {
+    private TaskPref pref;
+    TaskSection(String title, List<Task> taskList, TaskListFragment taskListFragment,
+                TaskPref pref) {
         super(new SectionParameters.Builder(R.layout.task_list_item)
                     .headerResourceId(R.layout.task_item_header)
                      .build());
@@ -36,6 +38,7 @@ class TaskSection extends StatelessSection{
         this.title = title;
         this.taskList = taskList;
         this.taskListFragment = taskListFragment;
+        this.pref = pref;
     }
 
     @Override
@@ -70,6 +73,7 @@ class TaskSection extends StatelessSection{
         private TextView taskTitle;
         private TextView taskDate;
         private ImageView isImportant;
+        private TextView isDone;
         private Task task;
         private int position;
 
@@ -79,6 +83,7 @@ class TaskSection extends StatelessSection{
             taskTitle = itemView.findViewById(R.id.task_title);
             taskDate = itemView.findViewById(R.id.task_time);
             isImportant = itemView.findViewById(R.id.task_important);
+            isDone = itemView.findViewById(R.id.task_done);
 
             itemView.setOnTouchListener(new SwipeTouchListener(
                     taskListFragment.getActivity(), this));
@@ -97,6 +102,13 @@ class TaskSection extends StatelessSection{
             taskDate.setText(time);
 
             isImportant.setVisibility(task.isUrgent() ? View.VISIBLE : View.GONE);
+            isDone.setVisibility(task.isDone() ? View.VISIBLE: View.GONE);
+
+            int color = pref.getDoneTaskColor();
+
+            if (task.isDone()){
+                itemView.setBackgroundColor(color);
+            }
         }
 
         void onClick() {
@@ -114,7 +126,7 @@ class TaskSection extends StatelessSection{
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    leave();
+                    enter();
                 }
 
                 @Override
@@ -124,9 +136,11 @@ class TaskSection extends StatelessSection{
             });
         }
 
-        void leave(){
+        void enter(){
+            task.setDone(true);
+            taskListFragment.updateTask(task);
             Animation enter = AnimationUtils.loadAnimation(taskListFragment.getActivity(), R.anim.enter_right);
-            itemView.setBackgroundColor(Color.LTGRAY);
+            itemView.setBackgroundColor(pref.getDoneTaskColor());
             itemView.startAnimation(enter);
         }
 

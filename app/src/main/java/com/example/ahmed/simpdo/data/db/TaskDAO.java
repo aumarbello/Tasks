@@ -79,6 +79,7 @@ public class TaskDAO {
         values.put(TASK_DESC, task.getTaskDesc());
         values.put(TASK_DATE, task.getTaskDate().getTimeInMillis());
         values.put(TASK_IMPORTANT, task.isUrgent() ? 0 : 1);
+        values.put(TASK_DONE, task.isDone() ? 0 : 1);
         return values;
     }
 

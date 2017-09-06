@@ -36,4 +36,8 @@ public class TaskListPresenter{
     }
 
 
+    void updateTask(Task task) {
+        taskDAO.updateTask(task);
+        fragment.update();
+    }
 }

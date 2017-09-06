@@ -49,6 +49,6 @@ public class TaskPref {
 
     public int getDoneTaskColor(){
         return sharedPreferences.getInt(resources.getString
-                (R.string.done_select_color_key), Color.GRAY);
+                (R.string.done_select_color_key), Color.LTGRAY);
     }
 }
