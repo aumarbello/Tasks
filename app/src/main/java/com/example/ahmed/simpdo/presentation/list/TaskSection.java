@@ -27,8 +27,8 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 class TaskSection extends StatelessSection{
     private String title;
     private List<Task> taskList;
-    private TaskList taskListFragment;
-    TaskSection(String title, List<Task> taskList, TaskList taskListFragment) {
+    private TaskListFragment taskListFragment;
+    TaskSection(String title, List<Task> taskList, TaskListFragment taskListFragment) {
         super(new SectionParameters.Builder(R.layout.task_list_item)
                     .headerResourceId(R.layout.task_item_header)
                      .build());
@@ -164,13 +164,49 @@ class TaskSection extends StatelessSection{
         @SuppressWarnings("deprecation")
         void bindHeader(String headerTitle){
             switch (headerTitle) {
-                case "Today": {
+                case "Previous": {
                     headerView.setText(headerTitle);
                     int color = headerView.getResources().getColor(R.color.today);
                     headerView.setBackgroundColor(color);
                     break;
                 }
-                case "Tomorrow": {
+                case "Monday": {
+                    headerView.setText(headerTitle);
+                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    headerView.setBackgroundColor(color);
+                    break;
+                }
+                case "Tuesday": {
+                    headerView.setText(headerTitle);
+                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    headerView.setBackgroundColor(color);
+                    break;
+                }
+                case "Wednesday": {
+                    headerView.setText(headerTitle);
+                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    headerView.setBackgroundColor(color);
+                    break;
+                }
+                case "Thursday": {
+                    headerView.setText(headerTitle);
+                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    headerView.setBackgroundColor(color);
+                    break;
+                }
+                case "Friday": {
+                    headerView.setText(headerTitle);
+                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    headerView.setBackgroundColor(color);
+                    break;
+                }
+                case "Saturday": {
+                    headerView.setText(headerTitle);
+                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    headerView.setBackgroundColor(color);
+                    break;
+                }
+                case "Sunday": {
                     headerView.setText(headerTitle);
                     int color = headerView.getResources().getColor(R.color.tomorrow);
                     headerView.setBackgroundColor(color);

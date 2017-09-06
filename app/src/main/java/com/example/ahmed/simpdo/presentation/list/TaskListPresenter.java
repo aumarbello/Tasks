@@ -12,11 +12,11 @@ import javax.inject.Inject;
  */
 
 public class TaskListPresenter{
-    private TaskList fragment;
+    private TaskListFragment fragment;
     private TaskDAO taskDAO;
 
     @Inject
-    TaskListPresenter(TaskDAO taskDAO, TaskList fragment) {
+    TaskListPresenter(TaskDAO taskDAO, TaskListFragment fragment) {
         this.taskDAO = taskDAO;
         this.fragment = fragment;
     }

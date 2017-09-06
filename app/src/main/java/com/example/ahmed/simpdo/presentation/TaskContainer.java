@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
-import com.example.ahmed.simpdo.presentation.list.TaskList;
+import com.example.ahmed.simpdo.presentation.list.TaskListFragment;
 import com.example.ahmed.simpdo.presentation.notifications.DailyService;
 import com.example.ahmed.simpdo.presentation.notifications.ImportantService;
 import com.example.ahmed.simpdo.presentation.splash.SplashFragment;
@@ -23,7 +23,7 @@ public class TaskContainer extends AppCompatActivity implements
     SplashFragment fragment;
 
     @Inject
-    TaskList taskList;
+    TaskListFragment taskListFragment;
 
     private FragmentManager manager;
 
@@ -43,12 +43,12 @@ public class TaskContainer extends AppCompatActivity implements
                 .commit();
     }
 
-    //return to taskList
+    //return to taskListFragment
     //general callBack
     @Override
     public void gotoList() {
         manager.beginTransaction()
-                .replace(R.id.task_container, taskList)
+                .replace(R.id.task_container, taskListFragment)
                 .commit();
     }
 }
