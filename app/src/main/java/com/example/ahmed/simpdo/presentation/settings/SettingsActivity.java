@@ -2,7 +2,6 @@ package com.example.ahmed.simpdo.presentation.settings;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -11,7 +10,6 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import com.example.ahmed.simpdo.R;
-import com.example.ahmed.simpdo.presentation.TaskContainer;
 
 /**
  * Created by ahmed on 9/4/17.
@@ -33,43 +31,6 @@ public class SettingsActivity extends PreferenceCompat {
                             : null);
         } else {
             preference.setSummary(stringValue);
-        }
-        return true;
-    };
-
-    private static Preference.OnPreferenceChangeListener
-            listListener = (preference, value) -> {
-        String stringValue = value.toString();
-        Resources resources = preference.getContext().getResources();
-
-        ListPreference listPreference = (ListPreference) preference;
-        int index = listPreference.findIndexOfValue(stringValue);
-
-        preference.setSummary(
-                index >= 0
-                        ? listPreference.getEntries()[index]
-                        : null);
-        int intValue = Integer.parseInt(stringValue);
-
-        switch (intValue){
-            case 3:
-                daysList.setEntries(resources.getStringArray(
-                        R.array.three_days_array_entries));
-                daysList.setEntryValues(resources.getStringArray(
-                        R.array.three_days_array_values));
-                break;
-            case 5:
-                daysList.setEntries(resources.getStringArray(
-                        R.array.five_days_array_entries));
-                daysList.setEntryValues(resources.getStringArray(
-                        R.array.five_days_array_values));
-                break;
-            case 7:
-                daysList.setEntries(resources.getStringArray(
-                        R.array.seven_days_array_entries));
-                daysList.setEntryValues(resources.getStringArray(
-                        R.array.seven_days_array_values));
-                break;
         }
         return true;
     };
@@ -115,14 +76,6 @@ public class SettingsActivity extends PreferenceCompat {
         context.startActivity(Intent.createChooser(intent, "Send FeedBack Mail"));
     }
 
-    private static void bindListPreference(Preference preference) {
-        preference.setOnPreferenceChangeListener(listListener);
-        listListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
-    }
-
 //    public void onBackPressed(){
         //todo create new container for taskList and start the activity here
 //        Intent intent = new Intent(this, TaskContainer.class);
@@ -138,20 +91,9 @@ public class SettingsActivity extends PreferenceCompat {
 
             addPreferencesFromResource(R.xml.settings_xml);
 
-            numberList = (ListPreference) findPreference(getString(R.string.number_of_days_key));
-
-            daysList = (ListPreference) findPreference(getString
-                    (R.string.select_day_key));
-
-            daysList.setEntries(getResources().getStringArray(
-                    R.array.five_days_array_entries));
-            daysList.setEntryValues(getResources().getStringArray(
-                    R.array.five_days_array_values));
-
             bindPreferenceSummaryToValue(findPreference(getString
                     (R.string.show_notification_key)));
-            bindPreferenceSummaryToValue(daysList);
-            bindListPreference(numberList);
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.number_of_days_key)));
 
             Preference mailPref = findPreference(getString
                     (R.string.contact_developer_key));

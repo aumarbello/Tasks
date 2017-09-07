@@ -40,12 +40,10 @@ public class TaskPref {
                 (R.string.show_notification_key), "Important");
     }
 
-    public boolean isDaysColorRandom(){
+    public boolean isDoneTaskColorRandom(){
         return sharedPreferences.getBoolean(resources.getString
-                (R.string.days_color_key), true);
+                (R.string.done_color_key), true);
     }
-
-    //todo color for each day header
 
     public int getDoneTaskColor(){
         return sharedPreferences.getInt(resources.getString

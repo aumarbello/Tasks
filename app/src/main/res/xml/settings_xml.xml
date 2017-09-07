@@ -30,36 +30,6 @@
     <PreferenceCategory android:title="Color">
         <SwitchPreference
             android:defaultValue="true"
-            android:key="@string/days_color_key"
-            android:title="@string/days_color_title"
-            android:summary="@string/days_color_summary"
-            />
-
-        <ListPreference
-            android:defaultValue="0"
-            android:key="@string/select_day_key"
-            android:title="@string/select_day_title"
-            android:entries="@array/three_days_array_entries"
-            android:entryValues="@array/three_days_array_values"
-            android:dialogTitle="@string/select_day_title"
-            android:dependency="@string/days_color_key"
-            />
-
-        <com.kizitonwose.colorpreference.ColorPreference
-            android:defaultValue="@color/colorPrimary"
-            android:key="@string/select_color_key"
-            android:title="@string/select_color_title"
-            android:dependency="@string/days_color_key"
-            app:colorShape="circle"
-            app:colorChoices="@array/color_array"
-            app:viewSize="normal"
-            app:numColumns="4"
-            app:showDialog="true"
-            />
-        <!--Color picker preference dependent on the above-->
-
-        <SwitchPreference
-            android:defaultValue="true"
             android:key="@string/done_color_key"
             android:title="@string/done_color_title"
             android:summary="@string/done_color_summary"

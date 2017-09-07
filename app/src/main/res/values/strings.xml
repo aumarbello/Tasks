@@ -28,22 +28,12 @@
     <string name="show_notification_title">Select Category to display Notification for</string>
     <string name="show_notification_dialog_title">Category Notifications</string>
 
-    <string name="days_color_key">key_days_color</string>
-    <string name="days_color_title">Day\'s Task Color</string>
-    <string name="days_color_summary">Select Color for Each Day at random</string>
-
     <string name="done_color_key">key_done_color</string>
     <string name="done_color_title">Done Task\'s Color</string>
-    <string name="done_color_summary">Mark Done Task\'s with Icon or Color</string>
+    <string name="done_color_summary">Select Done Task\'s Color at Random?</string>
 
     <string name="done_select_color_key">key_select_done_color</string>
     <string name="done_select_color_title">Select Color For Done Tasks</string>
-
-    <string name="select_day_key">key_select_day</string>
-    <string name="select_day_title">Select Day</string>
-
-    <string name="select_color_key">key_select_color</string>
-    <string name="select_color_title">Select Color for Above Day</string>
 
     <string name="about_summary">A Simple ToDo App</string>
 
