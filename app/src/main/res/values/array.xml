@@ -31,13 +31,26 @@
     </string-array>
 
     <array name="color_array">
-        <item>@color/colorPrimary</item>
-        <item>@color/colorPrimaryDark</item>
-        <item>@color/colorAccent</item>
-        <item>@color/background_color</item>
-        <item>@color/today</item>
-        <item>@color/tomorrow</item>
-        <item>@color/rest</item>
+        <item>#b3e5fc</item>
+        <item>#80deea</item>
+        <item>#80cbc4</item>
+        <item>#b39ddb</item>
+        <item>#9fa8da</item>
+        <item>#90caf9</item>
+        <item>#ce93d8</item>
+        <item>#f48fb1</item>
+        <item>#ce93d8</item>
+        <item>#e6ee9c</item>
+        <item>#c5e1a5</item>
+        <item>#a5d6a7</item>
+        <item>#ffcc80</item>
+        <item>#ffe082</item>
+        <item>#fff59d</item>
+        <item>#eeeeee</item>
+        <item>#bcaaa4</item>
+        <item>#ffab91</item>
+        <item>#b0bec5</item>
+        <item>#80d8ff</item>
     </array>
 
     <string-array name="seven_days_array_entries">

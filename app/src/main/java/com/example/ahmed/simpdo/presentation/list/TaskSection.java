@@ -197,55 +197,55 @@ class TaskSection extends StatelessSection{
             switch (headerTitle) {
                 case "Previous": {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.today);
+                    int color = headerView.getResources().getColor(R.color.previous);
                     headerView.setBackgroundColor(color);
                     break;
                 }
                 case "Monday": {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    int color = headerView.getResources().getColor(R.color.monday);
                     headerView.setBackgroundColor(color);
                     break;
                 }
                 case "Tuesday": {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    int color = headerView.getResources().getColor(R.color.tuesday);
                     headerView.setBackgroundColor(color);
                     break;
                 }
                 case "Wednesday": {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    int color = headerView.getResources().getColor(R.color.wednesday);
                     headerView.setBackgroundColor(color);
                     break;
                 }
                 case "Thursday": {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    int color = headerView.getResources().getColor(R.color.thursday);
                     headerView.setBackgroundColor(color);
                     break;
                 }
                 case "Friday": {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    int color = headerView.getResources().getColor(R.color.friday);
                     headerView.setBackgroundColor(color);
                     break;
                 }
                 case "Saturday": {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    int color = headerView.getResources().getColor(R.color.saturday);
                     headerView.setBackgroundColor(color);
                     break;
                 }
                 case "Sunday": {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.tomorrow);
+                    int color = headerView.getResources().getColor(R.color.sunday);
                     headerView.setBackgroundColor(color);
                     break;
                 }
                 default: {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.rest);
+                    int color = headerView.getResources().getColor(R.color.others);
                     headerView.setBackgroundColor(color);
                     break;
                 }

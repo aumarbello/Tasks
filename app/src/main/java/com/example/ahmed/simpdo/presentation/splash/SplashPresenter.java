@@ -17,7 +17,7 @@ public class SplashPresenter {
     private final int Splash_Time_Out = 3000;
 
     @Inject
-    public SplashPresenter(SplashFragment fragment){
+    SplashPresenter(SplashFragment fragment){
         this.fragment = fragment;
     }
 
