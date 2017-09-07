@@ -27,7 +27,6 @@ import javax.inject.Inject;
  */
 
 public class ImportantService extends IntentService {
-    //todo add to manifest
     private static final String TAG = "Important Service";
     @Inject
     TaskDAO taskDAO;
@@ -66,7 +65,7 @@ public class ImportantService extends IntentService {
     }
 
     public static void setTimeInterval(Context context){
-        Intent selfIntent = getIntent(context);
+        Intent selfIntent = ImportantService.getIntent(context);
         PendingIntent pendingIntent = PendingIntent.getService(context, 0,
                 selfIntent, 0);
 
@@ -75,7 +74,7 @@ public class ImportantService extends IntentService {
 
         if (isAlarmOn(context)){
             manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime(), 3000,
+                    SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES,
                     pendingIntent);
         }else {
             manager.cancel(pendingIntent);
@@ -87,7 +86,7 @@ public class ImportantService extends IntentService {
     public static boolean isAlarmOn(Context context){
         Intent intent = getIntent(context);
         PendingIntent pendingIntent = PendingIntent.getService(
-                context, 1, intent, PendingIntent.FLAG_NO_CREATE
+                context, 0, intent, PendingIntent.FLAG_NO_CREATE
         );
         return pendingIntent != null;
     }

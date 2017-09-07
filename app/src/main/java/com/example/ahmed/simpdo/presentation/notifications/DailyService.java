@@ -28,7 +28,6 @@ import javax.inject.Inject;
  */
 
 public class DailyService extends IntentService {
-    //todo add to manifest
     private static final String TAG = "DailyService";
     @Inject
     TaskDAO taskDAO;
@@ -81,7 +80,7 @@ public class DailyService extends IntentService {
     public static boolean isAlarmOn(Context context){
         Intent intent = getIntent(context);
         PendingIntent pendingIntent = PendingIntent.getService(
-                context, 1, intent, PendingIntent.FLAG_NO_CREATE
+                context, 0, intent, PendingIntent.FLAG_NO_CREATE
         );
         return pendingIntent != null;
     }

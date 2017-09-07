@@ -18,6 +18,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.settings.SettingsActivity" />
+
+        <service android:name=".presentation.notifications.ImportantService" />
+        <service android:name=".presentation.notifications.DailyService" />
     </application>
 
 </manifest>
