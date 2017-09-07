@@ -3,7 +3,6 @@ package com.example.ahmed.simpdo.presentation.list;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -71,10 +70,7 @@ class TaskSection extends StatelessSection{
     }
 
     void addTaskToList(Task task){
-        boolean  success = taskList.add(task);
-        if (success){
-            Log.d("Section", "Added task successfully " + title);
-        }
+        taskList.add(task);
     }
 
     void removeFromList(Task removedTask){

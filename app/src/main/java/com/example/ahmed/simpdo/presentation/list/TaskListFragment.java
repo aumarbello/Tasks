@@ -10,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -283,18 +282,15 @@ public class TaskListFragment extends Fragment implements
     }
 
     public void updateAfterAdding(Task task){
-        int taskPositionInSection = adapter.getPositionInSection(position);
         String sectionTag = getTaskSectionTag(task);
 
         TaskSection currentSection = (TaskSection) adapter.getSection(sectionTag);
         currentSection.addTaskToList(task);
 
         int items = currentSection.getContentItemsTotal();
-        Log.d(TAG, "Number of items - " + items);
 
-//        adapter.notifyItemInsertedInSection(getTaskSectionTag(task),
-//                taskPositionInSection);
-        adapter.notifyItemInserted(position + 1);
+        adapter.notifyItemInsertedInSection(getTaskSectionTag(task),
+                items);
     }
 
     public void updateAfterEditing(Task task){

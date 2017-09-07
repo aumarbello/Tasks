@@ -1,7 +1,5 @@
 package com.example.ahmed.simpdo.presentation.list;
 
-import android.util.Log;
-
 import com.example.ahmed.simpdo.data.model.Task;
 
 import java.util.ArrayList;
@@ -25,21 +23,16 @@ public class GetTaskList {
     List<Task> getTasks(String segment, List<String> dayString){
         switch (section){
             case 0:
-                Log.d(TAG, "Returning - " + threeGetTasks(segment, dayString));
                 return threeGetTasks(segment, dayString);
             case 1:
-                Log.d(TAG, "Returning - " + fiveGetTasks(segment, dayString));
                 return fiveGetTasks(segment, dayString);
             case 2:
-                Log.d(TAG, "Returning - " + sevenGetTasks(segment, dayString));
                 return sevenGetTasks(segment, dayString);
         }
-        Log.d(TAG, "Unable to resolve section parameter " + segment);
-        return new ArrayList<>();
+        return null;
     }
 
     private List<Task> threeGetTasks(String segment, List<String> dayString){
-        Log.d(TAG, "Entered get three tasks " + segment);
         List<Task> returnTasks = new ArrayList<>();
         Calendar today = Calendar.getInstance();
         int currentDay = today.get(Calendar.DAY_OF_YEAR);
@@ -84,7 +77,6 @@ public class GetTaskList {
     }
 
     private List<Task> fiveGetTasks(String segment, List<String> dayString){
-        Log.d(TAG, "Entered get five tasks " + segment);
         List<Task> returnTasks = new ArrayList<>();
         Calendar today = Calendar.getInstance();
         int currentDay = today.get(Calendar.DAY_OF_YEAR);
@@ -142,7 +134,6 @@ public class GetTaskList {
     }
 
     private List<Task> sevenGetTasks(String segment, List<String> dayString){
-        Log.d(TAG, "Entered get seven tasks " + segment);
         List<Task> returnTasks = new ArrayList<>();
         Calendar today = Calendar.getInstance();
         int currentDay = today.get(Calendar.DAY_OF_YEAR);

@@ -1,7 +1,5 @@
 package com.example.ahmed.simpdo.presentation.list;
 
-import android.util.Log;
-
 import com.example.ahmed.simpdo.data.model.Task;
 import com.example.ahmed.simpdo.data.pref.TaskPref;
 
@@ -15,7 +13,6 @@ import java.util.List;
 class GetTaskTag {
     private TaskPref pref;
     private List<String> segmentList;
-    private static final String TAG = "GetTaskTag";
 
     GetTaskTag(TaskPref pref, List<String> segmentList){
         this.pref = pref;
@@ -26,16 +23,13 @@ class GetTaskTag {
         int daysSegment = pref.getDaysSection();
         switch (daysSegment){
             case 0:
-                Log.d(TAG, "Returning " + threeDaySegment(task));
                 return threeDaySegment(task);
             case 1:
-                Log.d(TAG, "Returning " + fiveDaySegment(task));
                 return fiveDaySegment(task);
             case 2:
-                Log.d(TAG, "Returning " + sevenDaySegment(task));
                 return sevenDaySegment(task);
         }
-        return "Unable to resolve daySegment";
+        return null;
     }
 
     private String threeDaySegment(Task task){
