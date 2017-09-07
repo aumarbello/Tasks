@@ -3,6 +3,7 @@ package com.example.ahmed.simpdo.presentation.list;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -54,7 +55,7 @@ class TaskSection extends StatelessSection{
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
         TaskViewHolder taskHolder = (TaskViewHolder) holder;
-        taskHolder.bindTask(position);
+        taskHolder.bindTask(taskList.get(position), taskHolder.getAdapterPosition());
     }
 
     @Override
@@ -67,6 +68,25 @@ class TaskSection extends StatelessSection{
         TaskSectionHolder sectionHolder = (TaskSectionHolder) holder;
 
         sectionHolder.bindHeader(title);
+    }
+
+    void addTaskToList(Task task){
+        boolean  success = taskList.add(task);
+        if (success){
+            Log.d("Section", "Added task successfully " + title);
+        }
+    }
+
+    void removeFromList(Task removedTask){
+        taskList.remove(removedTask);
+    }
+
+    String getSectionTitle(){
+        return title;
+    }
+
+    boolean isSectionEmpty(){
+        return taskList.isEmpty();
     }
 
     class TaskViewHolder extends RecyclerView.ViewHolder{
@@ -89,8 +109,8 @@ class TaskSection extends StatelessSection{
                     taskListFragment.getActivity(), this));
         }
 
-        void bindTask(int position){
-            this.task = taskList.get(position);
+        void bindTask(Task task, int position){
+            this.task = task;
             this.position = position;
 
             taskTitle.setText(task.getTaskTitle());
@@ -112,7 +132,7 @@ class TaskSection extends StatelessSection{
         }
 
         void onClick() {
-            taskListFragment.viewTask(task);
+            taskListFragment.viewTask(task, position);
         }
 
         void onSwipe(){
@@ -138,6 +158,7 @@ class TaskSection extends StatelessSection{
 
         void enter(){
             task.setDone(true);
+            isDone.setVisibility(View.VISIBLE);
             taskListFragment.updateTask(task);
             Animation enter = AnimationUtils.loadAnimation(taskListFragment.getActivity(), R.anim.enter_right);
             itemView.setBackgroundColor(pref.getDoneTaskColor());
@@ -154,7 +175,7 @@ class TaskSection extends StatelessSection{
             menu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()){
                     case R.id.edit_task:
-                        taskListFragment.editTask(task);
+                        taskListFragment.editTask(task, position);
                         return true;
                     case R.id.delete_task:
                         taskListFragment.deleteTask(task, position);

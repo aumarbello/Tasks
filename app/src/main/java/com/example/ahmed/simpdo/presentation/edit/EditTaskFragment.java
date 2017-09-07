@@ -37,8 +37,8 @@ import butterknife.Unbinder;
 
 public class EditTaskFragment extends DialogFragment {
     public interface CallBack{
-        void updateView();
-        void updateAfterDelete();
+        void updateView(Task task);
+        void updateAfterDelete(Task task);
     }
 
     public EditTaskFragment(){
@@ -117,11 +117,11 @@ public class EditTaskFragment extends DialogFragment {
                 .setTitle("Edit Task")
                 .setPositiveButton("Delete", (dialogInterface, i) -> {
                     presenter.deleteTask(currentTask);
-                    callBack.updateAfterDelete();
+                    callBack.updateAfterDelete(currentTask);
                 })
                 .setNegativeButton("Save", ((dialogInterface, i) -> {
                     saveTask();
-                    callBack.updateView();
+                    callBack.updateView(currentTask);
                 }))
                 .create();
     }

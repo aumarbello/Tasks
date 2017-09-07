@@ -20,15 +20,18 @@ public class ViewTaskFragment extends DialogFragment {
     }
 
     public interface CallBack{
-        void editTask(Task task);
+        void editTask(Task task, int position);
     }
 
     private CallBack callBack;
+    private int position;
+    private static final String POSITION = "position";
 
-    public static ViewTaskFragment getInstance(Task task){
+    public static ViewTaskFragment getInstance(Task task, int position){
         ViewTaskFragment fragment = new ViewTaskFragment();
         Bundle args = new Bundle();
         args.putSerializable(AppConstants.ADD_VIEW_EXTRA, task);
+        args.putInt(POSITION, position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,6 +48,8 @@ public class ViewTaskFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstance){
         Task task = (Task) getArguments().getSerializable
                 (AppConstants.ADD_VIEW_EXTRA);
+
+        position = getArguments().getInt(POSITION);
         AlertDialog.Builder dialog;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
@@ -71,6 +76,6 @@ public class ViewTaskFragment extends DialogFragment {
 
 
     public void editTask(Task task) {
-        callBack.editTask(task);
+        callBack.editTask(task, position);
     }
 }

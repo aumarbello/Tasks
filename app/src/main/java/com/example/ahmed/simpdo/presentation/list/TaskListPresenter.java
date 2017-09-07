@@ -27,17 +27,16 @@ public class TaskListPresenter{
 
     void deleteTask(Task task) {
         taskDAO.deleteTask(task);
-        fragment.updateAfterDelete();
+        fragment.updateAfterDelete(task);
     }
 
     void addTask(Task task){
         taskDAO.addTask(task);
-        fragment.update();
+        fragment.updateAfterAdding(task);
     }
 
 
     void updateTask(Task task) {
         taskDAO.updateTask(task);
-        fragment.update();
     }
 }

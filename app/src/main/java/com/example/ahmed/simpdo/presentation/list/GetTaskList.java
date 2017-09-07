@@ -25,10 +25,13 @@ public class GetTaskList {
     List<Task> getTasks(String segment, List<String> dayString){
         switch (section){
             case 0:
+                Log.d(TAG, "Returning - " + threeGetTasks(segment, dayString));
                 return threeGetTasks(segment, dayString);
             case 1:
+                Log.d(TAG, "Returning - " + fiveGetTasks(segment, dayString));
                 return fiveGetTasks(segment, dayString);
             case 2:
+                Log.d(TAG, "Returning - " + sevenGetTasks(segment, dayString));
                 return sevenGetTasks(segment, dayString);
         }
         Log.d(TAG, "Unable to resolve section parameter " + segment);
