@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
     package="com.example.ahmed.simpdo">
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -21,6 +21,12 @@
 
         <service android:name=".presentation.notifications.ImportantService" />
         <service android:name=".presentation.notifications.DailyService" />
+
+        <receiver android:name=".presentation.notifications.TaskReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

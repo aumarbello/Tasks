@@ -21,17 +21,14 @@ import com.example.ahmed.simpdo.presentation.TaskContainer;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.inject.Inject;
-
 /**
  * Created by ahmed on 8/31/17.
  */
 
 public class DailyService extends IntentService {
     private static final String TAG = "DailyService";
-    @Inject
-    TaskDAO taskDAO;
     private String todayTasks;
+
     public DailyService() {
         super(TAG);
     }
@@ -42,15 +39,28 @@ public class DailyService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        TaskDAO taskDAO = new TaskDAO(this);
+        taskDAO.open();
+
         Log.d(TAG, "DailyService started");
-        ((App)getApplicationContext()).getComponent().inject(this);
+
         List<Task> taskList = taskDAO.getAllTasks();
 
+        int today = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+        int taskCount = 0;
 
-        todayTasks = taskList.isEmpty() ? "You have no tasks today"
-                : "You have " + taskList.size() + " tasks today";
+        for(Task task: taskList){
+            int taskDay = task.getTaskDate().get(Calendar.DAY_OF_YEAR);
+            if (today == taskDay){
+                taskCount++;
+            }
+        }
+        taskDAO.close();
 
-        showAlarmNotification();
+        todayTasks = taskCount == 0 ? "You have no tasks today"
+                : "You have " + taskCount + " tasks today";
+
+        showAlarmNotification(taskCount);
     }
 
     public static void setTimeInterval(Context context){
@@ -85,7 +95,7 @@ public class DailyService extends IntentService {
         return pendingIntent != null;
     }
 
-    public void showAlarmNotification(){
+    public void showAlarmNotification(int taskCount){
         int request = (int) System.currentTimeMillis();
 
         Intent i = new Intent(this, TaskContainer.class);
@@ -101,7 +111,10 @@ public class DailyService extends IntentService {
                 .setSmallIcon(R.drawable.task)
                 .setContentIntent(pI)
                 .setAutoCancel(true)
+                .setNumber(taskCount)
+                .setShowWhen(true)
                 .build();
+        notification.when = Calendar.getInstance().getTimeInMillis();
 
             NotificationManagerCompat managerCompat = NotificationManagerCompat
                     .from(this);

@@ -16,6 +16,7 @@ import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.db.TaskDAO;
 import com.example.ahmed.simpdo.data.model.Task;
+import com.example.ahmed.simpdo.data.pref.TaskPref;
 import com.example.ahmed.simpdo.presentation.TaskContainer;
 
 import java.util.Calendar;
@@ -28,9 +29,11 @@ import javax.inject.Inject;
 
 public class ImportantService extends IntentService {
     private static final String TAG = "Important Service";
+
     @Inject
-    TaskDAO taskDAO;
+    TaskPref pref;
     private StringBuilder dueTask;
+    private int taskCount;
 
     public ImportantService() {
         super(TAG);
@@ -42,22 +45,51 @@ public class ImportantService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        TaskDAO taskDAO = new TaskDAO(this);
+        taskDAO.open();
         Log.d(TAG, "ImportantService started");
         ((App)getApplicationContext()).getComponent().inject(this);
 
         Calendar today = Calendar.getInstance();
         int hour = today.get(Calendar.HOUR_OF_DAY);
         boolean showNotification = false;
+
+        String category = pref.getNotificationCategory();
+
         for (Task task : taskDAO.getAllTasks()) {
             int taskHour = task.getTaskDate().get(Calendar.HOUR_OF_DAY);
 
-            if (hour == taskHour && task.isUrgent()){
-                dueTask.append("Task ")
-                        .append(task.getTaskTitle())
-                        .append(" is Due.\n");
-                showNotification = true;
+            switch (category){
+                case "Important":
+                    if (hour == taskHour && task.isUrgent()){
+                        dueTask.append("Task ")
+                                .append(task.getTaskTitle())
+                                .append(" is Due.\n");
+                        showNotification = true;
+                        taskCount++;
+                    }
+                    break;
+                case "Normal":
+                    if (hour == taskHour && !task.isUrgent()){
+                        dueTask.append("Task ")
+                                .append(task.getTaskTitle())
+                                .append(" is Due.\n");
+                        showNotification = true;
+                        taskCount++;
+                    }
+                    break;
+                case "All":
+                    if (hour == taskHour){
+                        dueTask.append("Task ")
+                                .append(task.getTaskTitle())
+                                .append(" is Due.\n");
+                        showNotification = true;
+                        taskCount++;
+                    }
+                    break;
             }
         }
+        taskDAO.close();
 
         if (showNotification){
             showAlarmNotification();
@@ -74,7 +106,7 @@ public class ImportantService extends IntentService {
 
         if (isAlarmOn(context)){
             manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+                    SystemClock.elapsedRealtime(), 60000,
                     pendingIntent);
         }else {
             manager.cancel(pendingIntent);
@@ -107,7 +139,11 @@ public class ImportantService extends IntentService {
                 .setSmallIcon(R.drawable.task)
                 .setContentIntent(pI)
                 .setAutoCancel(true)
+                .setShowWhen(true)
+                .setNumber(taskCount)
                 .build();
+
+        notification.when = Calendar.getInstance().getTimeInMillis();
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat
                 .from(this);
