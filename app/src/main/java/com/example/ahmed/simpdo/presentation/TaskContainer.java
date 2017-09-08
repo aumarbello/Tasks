@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.presentation.list.TaskListFragment;
+import com.example.ahmed.simpdo.presentation.notifications.ImportantService;
 import com.example.ahmed.simpdo.presentation.splash.SplashFragment;
 
 import javax.inject.Inject;
@@ -36,6 +37,8 @@ public class TaskContainer extends AppCompatActivity implements
         manager.beginTransaction()
                 .add(R.id.task_container, fragment)
                 .commit();
+
+        ImportantService.setTimeInterval(this);
     }
 
     //return to taskListFragment

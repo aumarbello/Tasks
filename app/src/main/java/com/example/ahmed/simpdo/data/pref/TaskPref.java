@@ -35,9 +35,10 @@ public class TaskPref {
         return Integer.parseInt(dayString);
     }
 
-    public String getNotificationCategory(){
-        return sharedPreferences.getString(resources.getString
-                (R.string.show_notification_key), "Important");
+    public int getNotificationCategory(){
+        String number = sharedPreferences.getString(resources.getString
+                (R.string.show_notification_key), "2");
+        return Integer.parseInt(number);
     }
 
     public boolean isDoneTaskColorRandom(){

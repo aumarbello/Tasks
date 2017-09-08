@@ -154,13 +154,13 @@ public class EditTaskFragment extends DialogFragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
                     case 0:
-                        currentTask.setUrgent(true);
+                        //spinner header
                         break;
                     case 1:
-                        currentTask.setUrgent(false);
+                        currentTask.setUrgent(true);
                         break;
                     case 2:
-                        //todo add new category
+                        currentTask.setUrgent(false);
                         break;
                 }
             }

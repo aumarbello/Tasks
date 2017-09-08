@@ -78,7 +78,7 @@ public class DailyService extends IntentService {
 
         if (isAlarmOn(context)){
             manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime(), 3000,
+                    SystemClock.elapsedRealtime(), calendar.getTimeInMillis(),
                     pendingIntent);
         }else {
             manager.cancel(pendingIntent);

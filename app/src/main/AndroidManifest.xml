@@ -1,7 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
     package="com.example.ahmed.simpdo">
+
+    <permission android:name="com.example.ahmed.simpdo.presentation.notifications.PRIVATE"
+        android:protectionLevel="signature"/>
+
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="com.example.ahmed.simpdo.presentation.notifications.PRIVATE"/>
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -25,6 +30,12 @@
         <receiver android:name=".presentation.notifications.TaskReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".presentation.notifications.NotificationReceiver"
+            android:exported="false">
+            <intent-filter android:priority="-999">
+                <action android:name="com.example.ahmed.simpdo.presentation.notifications"/>
             </intent-filter>
         </receiver>
     </application>
