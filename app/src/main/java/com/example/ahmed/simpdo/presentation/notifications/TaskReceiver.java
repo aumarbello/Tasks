@@ -16,6 +16,6 @@ public class TaskReceiver extends BroadcastReceiver {
         Log.d(TAG, "Received intent - " + intent);
 
         DailyService.setTimeInterval(context);
-        ImportantService.setTimeInterval(context);
+        IndividualService.setTimeInterval(context);
     }
 }

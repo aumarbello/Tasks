@@ -1,5 +1,6 @@
 package com.example.ahmed.simpdo.presentation.notifications;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
@@ -9,10 +10,7 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
-
-import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.db.TaskDAO;
 import com.example.ahmed.simpdo.data.model.Task;
@@ -28,6 +26,12 @@ import java.util.List;
 public class DailyService extends IntentService {
     private static final String TAG = "DailyService";
     private String todayTasks;
+    public static final String DAILY_SERVICE =
+            "com.example.ahmed.simpdo.presentation.notifications.dailyService";
+    public static final String DAILY_PRIVATE =
+            "com.example.ahmed.simpdo.presentation.notifications.dailyService.DAILY_PRIVATE";
+    public static final String DAILY_REQ_CODE = "DAILY_REQUEST_CODE";
+    public static final String DAILY_NOTIFICATION = "DAILY_NOTIFICATION";
 
     public DailyService() {
         super(TAG);
@@ -116,8 +120,14 @@ public class DailyService extends IntentService {
                 .build();
         notification.when = Calendar.getInstance().getTimeInMillis();
 
-            NotificationManagerCompat managerCompat = NotificationManagerCompat
-                    .from(this);
-        managerCompat.notify(11011, notification);
+        showNotificationInBackground(4, notification);
+    }
+
+    private void showNotificationInBackground(int requestCode, Notification notification) {
+        Intent i = new Intent(DAILY_SERVICE);
+        i.putExtra(DAILY_REQ_CODE, requestCode);
+        i.putExtra(DAILY_NOTIFICATION, notification);
+        sendOrderedBroadcast(i, DAILY_PRIVATE, null, null,
+                Activity.RESULT_OK, null, null);
     }
 }

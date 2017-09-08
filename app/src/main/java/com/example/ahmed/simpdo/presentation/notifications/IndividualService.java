@@ -29,7 +29,7 @@ import javax.inject.Inject;
  * Created by ahmed on 8/31/17.
  */
 
-public class ImportantService extends IntentService {
+public class IndividualService extends IntentService {
     private static final String TAG = "Important Service";
     public static final String IMPORTANT_SERVICE =
             "com.example.ahmed.simpdo.presentation.notifications";
@@ -43,12 +43,12 @@ public class ImportantService extends IntentService {
     private StringBuilder dueTask;
     private int taskCount;
 
-    public ImportantService() {
+    public IndividualService() {
         super(TAG);
     }
 
     public static Intent getIntent(Context context){
-        return new Intent(context, ImportantService.class);
+        return new Intent(context, IndividualService.class);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ImportantService extends IntentService {
         TaskDAO taskDAO = new TaskDAO(this);
         taskDAO.open();
 
-        Log.d(TAG, "ImportantService started");
+        Log.d(TAG, "IndividualService started");
         ((App)getApplicationContext()).getComponent().inject(this);
 
         dueTask = new StringBuilder();
@@ -120,7 +120,7 @@ public class ImportantService extends IntentService {
     }
 
     public static void setTimeInterval(Context context){
-        Intent selfIntent = ImportantService.getIntent(context);
+        Intent selfIntent = IndividualService.getIntent(context);
         PendingIntent pendingIntent = PendingIntent.getService(context, 0,
                 selfIntent, 0);
 

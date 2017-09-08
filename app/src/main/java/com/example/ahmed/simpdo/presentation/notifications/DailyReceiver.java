@@ -12,8 +12,8 @@ import android.util.Log;
  * Created by ahmed on 9/8/17.
  */
 
-public class NotificationReceiver extends BroadcastReceiver {
-    private static final String TAG = "NotificationReceiver";
+public class DailyReceiver extends BroadcastReceiver {
+    private static final String TAG = "DailyReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -22,8 +22,9 @@ public class NotificationReceiver extends BroadcastReceiver {
             return;
         }
 
-        int reqCode = intent.getIntExtra(ImportantService.REQ_CODE, 0);
-        Notification notification = intent.getParcelableExtra(ImportantService.NOTIFICATION);
+        int reqCode = intent.getIntExtra(DailyService.DAILY_REQ_CODE, 4);
+        Notification notification = intent.getParcelableExtra
+                (DailyService.DAILY_NOTIFICATION);
 
         NotificationManagerCompat compat = NotificationManagerCompat.from(context);
         compat.notify(reqCode, notification);

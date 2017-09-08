@@ -5,8 +5,13 @@
     <permission android:name="com.example.ahmed.simpdo.presentation.notifications.PRIVATE"
         android:protectionLevel="signature"/>
 
+    <permission android:name="com.example.ahmed.simpdo.presentation.notifications.dailyService.DAILY_PRIVATE"
+        android:protectionLevel="signature"/>
+
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="com.example.ahmed.simpdo.presentation.notifications.PRIVATE"/>
+    <uses-permission android:name="com.example.ahmed.simpdo.presentation.notifications.dailyService.DAILY_PRIVATE"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -24,7 +29,7 @@
         </activity>
         <activity android:name=".presentation.settings.SettingsActivity" />
 
-        <service android:name=".presentation.notifications.ImportantService" />
+        <service android:name=".presentation.notifications.IndividualService" />
         <service android:name=".presentation.notifications.DailyService" />
 
         <receiver android:name=".presentation.notifications.TaskReceiver">
@@ -32,10 +37,16 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".presentation.notifications.NotificationReceiver"
+        <receiver android:name=".presentation.notifications.IndividualReceiver"
             android:exported="false">
             <intent-filter android:priority="-999">
                 <action android:name="com.example.ahmed.simpdo.presentation.notifications"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".presentation.notifications.DailyReceiver"
+            android:exported="false">
+            <intent-filter android:priority="-999">
+                <action android:name="com.example.ahmed.simpdo.presentation.notifications.dailyService"/>
             </intent-filter>
         </receiver>
     </application>

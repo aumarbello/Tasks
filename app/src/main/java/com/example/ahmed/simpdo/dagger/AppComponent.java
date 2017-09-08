@@ -3,7 +3,7 @@ package com.example.ahmed.simpdo.dagger;
 import com.example.ahmed.simpdo.presentation.TaskContainer;
 import com.example.ahmed.simpdo.presentation.edit.EditTaskFragment;
 import com.example.ahmed.simpdo.presentation.list.TaskListFragment;
-import com.example.ahmed.simpdo.presentation.notifications.ImportantService;
+import com.example.ahmed.simpdo.presentation.notifications.IndividualService;
 import com.example.ahmed.simpdo.presentation.splash.SplashFragment;
 
 import javax.inject.Singleton;
@@ -20,5 +20,5 @@ public interface AppComponent {
     void inject(TaskListFragment taskListFragment);
     void inject(EditTaskFragment editTaskFragment);
     void inject(TaskContainer container);
-    void inject(ImportantService importantService);
+    void inject(IndividualService individualService);
 }
