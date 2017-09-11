@@ -7,7 +7,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -67,7 +66,7 @@ public class DailyService extends IntentService {
         showAlarmNotification(taskCount);
     }
 
-    public static void setTimeInterval(Context context){
+    public static void setTimeInterval(Context context, boolean isOn){
         Intent selfIntent = getIntent(context);
         PendingIntent pendingIntent = PendingIntent.getService(context, 0,
                 selfIntent, 0);
@@ -80,23 +79,14 @@ public class DailyService extends IntentService {
         AlarmManager manager = (AlarmManager) context.getSystemService
                 (Context.ALARM_SERVICE);
 
-        if (isAlarmOn(context)){
+        if (isOn){
             manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime(), calendar.getTimeInMillis(),
+                    calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
                     pendingIntent);
         }else {
             manager.cancel(pendingIntent);
             pendingIntent.cancel();
         }
-    }
-
-
-    public static boolean isAlarmOn(Context context){
-        Intent intent = getIntent(context);
-        PendingIntent pendingIntent = PendingIntent.getService(
-                context, 0, intent, PendingIntent.FLAG_NO_CREATE
-        );
-        return pendingIntent != null;
     }
 
     public void showAlarmNotification(int taskCount){

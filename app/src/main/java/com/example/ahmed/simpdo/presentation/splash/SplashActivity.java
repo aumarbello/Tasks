@@ -38,9 +38,6 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.splash_layout);
         overridePendingTransition(0, 0);
 
-        IndividualService.setTimeInterval(this);
-        DailyService.setTimeInterval(this);
-
         presenter.startTaskList();
     }
 

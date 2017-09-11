@@ -119,7 +119,7 @@ public class IndividualService extends IntentService {
         }
     }
 
-    public static void setTimeInterval(Context context){
+    public static void setTimeInterval(Context context, boolean isOn){
         Intent selfIntent = IndividualService.getIntent(context);
         PendingIntent pendingIntent = PendingIntent.getService(context, 0,
                 selfIntent, 0);
@@ -127,7 +127,7 @@ public class IndividualService extends IntentService {
         AlarmManager manager = (AlarmManager) context.getSystemService
                 (Context.ALARM_SERVICE);
 
-        if (isAlarmOn(context)){
+        if (isOn){
             manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_HOUR,
                     pendingIntent);
@@ -135,15 +135,6 @@ public class IndividualService extends IntentService {
             manager.cancel(pendingIntent);
             pendingIntent.cancel();
         }
-    }
-
-
-    public static boolean isAlarmOn(Context context){
-        Intent intent = getIntent(context);
-        PendingIntent pendingIntent = PendingIntent.getService(
-                context, 0, intent, PendingIntent.FLAG_NO_CREATE
-        );
-        return pendingIntent != null;
     }
 
     public void showAlarmNotification(){
