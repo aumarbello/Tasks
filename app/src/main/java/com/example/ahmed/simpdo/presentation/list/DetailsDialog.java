@@ -48,14 +48,36 @@ public class DetailsDialog extends DialogFragment {
     private DetailsCallBack callBack;
     private Unbinder unbinder;
     private String category;
+    private static final String taskTitle = "title";
+    private static final String taskDesc = "desc";
 
     static DetailsDialog getInstance(){
         return new DetailsDialog();
     }
 
+    @Override
+    public void onCreate(Bundle savedInstance){
+        super.onCreate(savedInstance);
+        setRetainInstance(true);
+
+        callBack = (DetailsCallBack) getTargetFragment();
+    }
+
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstance){
+    public Dialog onCreateDialog(Bundle inState){
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view = inflater.inflate(R.layout.add_task_layout, null, false);
+        unbinder = ButterKnife.bind(this, view);
+
+        if (inState != null){
+            String title = inState.getString(taskTitle);
+            String desc = inState.getString(taskDesc);
+
+            titleView.setText(title);
+            descView.setText(desc);
+        }
+
         AlertDialog.Builder dialog;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             dialog  = new AlertDialog.Builder(getActivity(),
@@ -63,13 +85,6 @@ public class DetailsDialog extends DialogFragment {
         }else {
             dialog = new AlertDialog.Builder(getActivity());
         }
-
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view = inflater.inflate(R.layout.add_task_layout, null, false);
-
-        callBack = (DetailsCallBack) getTargetFragment();
-
-        unbinder = ButterKnife.bind(this, view);
 
         setUpSpinner();
 
@@ -82,12 +97,6 @@ public class DetailsDialog extends DialogFragment {
                     callBack.createTask(taskTitle, taskDescription, category);
                 }))
                 .create();
-    }
-
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        unbinder.unbind();
     }
 
     private void setUpSpinner(){
@@ -118,5 +127,22 @@ public class DetailsDialog extends DialogFragment {
 
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        outState.putString(taskTitle, titleView.getText().toString());
+        outState.putString(taskDesc, descView.getText().toString());
+    }
+
+    @Override
+    public void onDestroyView(){
+        unbinder.unbind();
+        Dialog dialog = getDialog();
+
+        if (dialog != null && getRetainInstance()){
+            dialog.setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 }

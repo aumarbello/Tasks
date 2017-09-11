@@ -1,5 +1,7 @@
 package com.example.ahmed.simpdo.presentation.list;
 
+import android.util.Log;
+
 import com.example.ahmed.simpdo.data.model.Task;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ public class GetTaskList {
     private int section;
     private List<Task> taskList;
 
-    public GetTaskList(int section, List<Task> taskList){
+    GetTaskList(int section, List<Task> taskList){
         this.section = section;
         this.taskList = taskList;
     }
@@ -28,8 +30,11 @@ public class GetTaskList {
                 return fiveGetTasks(segment, dayString);
             case 2:
                 return sevenGetTasks(segment, dayString);
+            default:
+                Log.d(getClass().getSimpleName(),
+                        "Could not match segment - " + segment);
+                return new ArrayList<>();
         }
-        return null;
     }
 
     private List<Task> threeGetTasks(String segment, List<String> dayString){

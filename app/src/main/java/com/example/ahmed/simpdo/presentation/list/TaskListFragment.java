@@ -18,10 +18,12 @@ import android.view.ViewGroup;
 
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
+import com.example.ahmed.simpdo.data.model.AllTasks;
 import com.example.ahmed.simpdo.data.model.Task;
 import com.example.ahmed.simpdo.data.pref.TaskPref;
 import com.example.ahmed.simpdo.presentation.edit.EditTaskFragment;
 import com.example.ahmed.simpdo.presentation.settings.SettingsActivity;
+import com.example.ahmed.simpdo.presentation.splash.SplashActivity;
 import com.example.ahmed.simpdo.presentation.view.ViewTaskFragment;
 
 import java.util.ArrayList;
@@ -50,9 +52,7 @@ public class TaskListFragment extends BackgroundFragment implements
     @Inject
     TaskPref preferences;
 
-    @Inject
-    GetTaskList getTaskList;
-
+    private GetTaskList getTaskList;
     private Unbinder unbinder;
     private SectionedRecyclerViewAdapter adapter;
     private Calendar todayCalender;
@@ -66,6 +66,7 @@ public class TaskListFragment extends BackgroundFragment implements
     private final static String TAG = "TaskList";
     private int daysSectionValue;
     private List<String> dayString;
+    private AllTasks allTasks;
 
     @BindView(R.id.task_list)
     RecyclerView taskListView;
@@ -77,8 +78,30 @@ public class TaskListFragment extends BackgroundFragment implements
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         setHasOptionsMenu(true);
-
+        setRetainInstance(true);
         ((App)getActivity().getApplication()).getComponent().inject(this);
+        adapter = new SectionedRecyclerViewAdapter();
+
+        Bundle args = getArguments();
+        allTasks = new AllTasks();
+
+        if (args != null){
+            allTasks = (AllTasks) getArguments().getSerializable
+                    (SplashActivity.taskList);
+            if (allTasks == null){
+                allTasks = new AllTasks();
+                List<Task> taskList = presenter.getAllTasks();
+                allTasks.setTaskList(taskList);
+            }
+        }else if (savedInstance != null){
+            allTasks = (AllTasks) savedInstance.getSerializable(TAG);
+        }else{
+            List<Task> taskList = presenter.getAllTasks();
+            allTasks.setTaskList(taskList);
+        }
+
+
+
         int numberOfDaysPref = preferences.getDaysSection();
 
         todayCalender = Calendar.getInstance();
@@ -96,6 +119,7 @@ public class TaskListFragment extends BackgroundFragment implements
                 daysSectionValue = 7;
                 break;
         }
+        getTaskList = new GetTaskList(numberOfDaysPref, allTasks.getTaskList());
         populateDayStrings();
     }
 
@@ -109,7 +133,6 @@ public class TaskListFragment extends BackgroundFragment implements
         addTask.setOnClickListener(fab -> showCalender());
 
         taskListView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new SectionedRecyclerViewAdapter();
         createSections();
         taskListView.setAdapter(adapter);
 
@@ -166,6 +189,7 @@ public class TaskListFragment extends BackgroundFragment implements
     public void deleteTask(Task task, int position){
         this.position = position;
         presenter.deleteTask(task);
+        updateAfterDelete(task);
     }
 
     private void showCalender(){
@@ -235,11 +259,12 @@ public class TaskListFragment extends BackgroundFragment implements
         task.setTaskTitle(title);
         task.setTaskDesc(description);
 
-        if (!(category == null)) {
+        if (category != null) {
             task.setUrgent(category.equals("Important"));
         }
 
         presenter.addTask(task);
+        updateAfterAdding(task);
     }
 
     private void createSections(){
@@ -330,5 +355,10 @@ public class TaskListFragment extends BackgroundFragment implements
         if (preferences.isPreviousTaskShown()){
             dayString.add("Previous");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstance){
+        savedInstance.putSerializable(TAG, allTasks);
     }
 }

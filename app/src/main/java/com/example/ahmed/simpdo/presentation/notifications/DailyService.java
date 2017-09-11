@@ -14,7 +14,7 @@ import android.util.Log;
 import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.db.TaskDAO;
 import com.example.ahmed.simpdo.data.model.Task;
-import com.example.ahmed.simpdo.presentation.TaskContainer;
+import com.example.ahmed.simpdo.presentation.list.TaskListContainer;
 
 import java.util.Calendar;
 import java.util.List;
@@ -102,7 +102,7 @@ public class DailyService extends IntentService {
     public void showAlarmNotification(int taskCount){
         int request = (int) System.currentTimeMillis();
 
-        Intent i = new Intent(this, TaskContainer.class);
+        Intent i = new Intent(this, TaskListContainer.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pI = PendingIntent.getActivity(this, request, i,

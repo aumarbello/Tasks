@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import com.example.ahmed.simpdo.R;
+import com.example.ahmed.simpdo.presentation.list.TaskListContainer;
 
 /**
  * Created by ahmed on 9/4/17.
@@ -40,6 +41,7 @@ public class SettingsActivity extends PreferenceCompat {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        overridePendingTransition(0, 0);
 
         PreferenceManager.setDefaultValues(this, R.xml.settings_xml, false);
 
@@ -56,11 +58,13 @@ public class SettingsActivity extends PreferenceCompat {
                         .getString(preference.getKey(), ""));
     }
 
+    @Override
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName);
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == android.R.id.home){
             onBackPressed();
@@ -75,12 +79,12 @@ public class SettingsActivity extends PreferenceCompat {
         intent.putExtra(Intent.EXTRA_SUBJECT, "FeedBack on Tasks App");
         context.startActivity(Intent.createChooser(intent, "Send FeedBack Mail"));
     }
-
-//    public void onBackPressed(){
-        //todo create new container for taskList and start the activity here
-//        Intent intent = new Intent(this, TaskContainer.class);
-//        startActivity(intent);
-//    }
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, TaskListContainer.class);
+        startActivity(intent);
+        finish();
+    }
 
     public static class GeneralPreferenceFragment extends PreferenceFragment{
         private static ListPreference numberList;

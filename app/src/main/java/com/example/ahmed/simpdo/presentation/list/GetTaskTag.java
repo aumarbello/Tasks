@@ -1,5 +1,7 @@
 package com.example.ahmed.simpdo.presentation.list;
 
+import android.util.Log;
+
 import com.example.ahmed.simpdo.data.model.Task;
 import com.example.ahmed.simpdo.data.pref.TaskPref;
 
@@ -28,8 +30,11 @@ class GetTaskTag {
                 return fiveDaySegment(task);
             case 2:
                 return sevenDaySegment(task);
+            default:
+                Log.d(getClass().getSimpleName(), "Could not resolve task - "
+                        + task + " - for days segment - " + daysSegment);
+                return "Previous";
         }
-        return null;
     }
 
     private String threeDaySegment(Task task){

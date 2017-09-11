@@ -41,6 +41,8 @@ public class ViewTaskFragment extends DialogFragment {
         super.onCreate(savedInstance);
 
         callBack = (CallBack) getTargetFragment();
+
+        setRetainInstance(true);
     }
 
     @NonNull
@@ -77,5 +79,15 @@ public class ViewTaskFragment extends DialogFragment {
 
     public void editTask(Task task) {
         callBack.editTask(task, position);
+    }
+
+    @Override
+    public void onDestroyView(){
+        Dialog dialog = getDialog();
+
+        if (dialog != null && getRetainInstance()){
+            dialog.setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 }

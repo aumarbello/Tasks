@@ -12,13 +12,11 @@ import javax.inject.Inject;
  */
 
 public class TaskListPresenter{
-    private TaskListFragment fragment;
     private TaskDAO taskDAO;
 
     @Inject
-    TaskListPresenter(TaskDAO taskDAO, TaskListFragment fragment) {
+    TaskListPresenter(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
-        this.fragment = fragment;
     }
 
     List<Task> getAllTasks(){
@@ -27,12 +25,10 @@ public class TaskListPresenter{
 
     void deleteTask(Task task) {
         taskDAO.deleteTask(task);
-        fragment.updateAfterDelete(task);
     }
 
     void addTask(Task task){
         taskDAO.addTask(task);
-        fragment.updateAfterAdding(task);
     }
 
 

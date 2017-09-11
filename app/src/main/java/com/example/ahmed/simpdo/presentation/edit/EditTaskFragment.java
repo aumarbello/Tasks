@@ -69,6 +69,10 @@ public class EditTaskFragment extends DialogFragment {
     private Calendar currentDate;
     private CallBack callBack;
 
+    private static final String TASK_TITLE = "title";
+    private static final String TASK_DESC = "desc";
+    private static final String TASK_DATE = "date";
+
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
@@ -83,6 +87,8 @@ public class EditTaskFragment extends DialogFragment {
             newCalender = currentTask.getTaskDate();
             currentDate = currentTask.getTaskDate();
         }
+
+        setRetainInstance(true);
     }
 
     @NonNull
@@ -101,12 +107,26 @@ public class EditTaskFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.edit_task_layout, null, false);
         unbinder = ButterKnife.bind(this, view);
+        if (savedInstance != null){
+            String title = savedInstance.getString(TASK_TITLE);
+            String desc = savedInstance.getString(TASK_DESC);
+            Calendar newCal = Calendar.getInstance();
+            long dateInMillSecs = savedInstance.getLong(TASK_DATE);
+            newCal.setTimeInMillis(dateInMillSecs);
 
-        taskTitle.setText(currentTask.getTaskTitle());
-        taskDesc.setText(currentTask.getTaskDesc());
+            taskTitle.setText(title);
+            taskDesc.setText(desc);
 
-        dateView.setText(dateString(currentTask.getTaskDate()));
-        timeView.setText(timeString(currentTask.getTaskDate()));
+            dateView.setText(dateString(newCal));
+            timeView.setText(timeString(newCal));
+        }else {
+            taskTitle.setText(currentTask.getTaskTitle());
+            taskDesc.setText(currentTask.getTaskDesc());
+
+            dateView.setText(dateString(currentTask.getTaskDate()));
+            timeView.setText(timeString(currentTask.getTaskDate()));
+        }
+
 
         dateView.setOnClickListener(v -> openDateDialog());
         timeView.setOnClickListener(v -> openTimeDialog());
@@ -124,12 +144,6 @@ public class EditTaskFragment extends DialogFragment {
                     callBack.updateView(currentTask);
                 }))
                 .create();
-    }
-
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        unbinder.unbind();
     }
 
     private String dateString(Calendar calendar){
@@ -177,8 +191,10 @@ public class EditTaskFragment extends DialogFragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             dateDialog = new DatePickerDialog(getActivity(),
                     android.R.style.Theme_Material_Light_Dialog_Alert,
-                    (datePicker, year, month, day) ->
-                            newCalender.set(year, month, day),
+                    (datePicker, year, month, day) -> {
+                        newCalender.set(year, month, day);
+                        dateView.setText(dateString(newCalender));
+                    },
                     currentDate.get(Calendar.YEAR),
                     currentDate.get(Calendar.MONTH),
                     currentDate.get(Calendar.DAY_OF_MONTH));
@@ -202,6 +218,7 @@ public class EditTaskFragment extends DialogFragment {
                     (timePicker, hour, minute) -> {
                         newCalender.set(Calendar.HOUR_OF_DAY, hour);
                         newCalender.set(Calendar.MINUTE, minute);
+                        timeView.setText(timeString(newCalender));
                     },
                     currentDate.get(Calendar.HOUR_OF_DAY),
                     currentDate.get(Calendar.MINUTE), false);
@@ -210,6 +227,7 @@ public class EditTaskFragment extends DialogFragment {
                     (timePicker, hour, minute) -> {
                         newCalender.set(Calendar.HOUR_OF_DAY, hour);
                         newCalender.set(Calendar.MINUTE, minute);
+                        timeView.setText(timeString(newCalender));
                     },
                     currentDate.get(Calendar.HOUR_OF_DAY),
                     currentDate.get(Calendar.MINUTE), false);
@@ -232,5 +250,24 @@ public class EditTaskFragment extends DialogFragment {
         args.putSerializable(AppConstants.EDIT_EXTRA, task);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle bundle){
+        bundle.putString(TASK_TITLE, taskTitle.getText().toString());
+        bundle.putString(TASK_DESC, taskDesc.getText().toString());
+        bundle.putLong(TASK_DATE, newCalender.getTimeInMillis());
+    }
+
+    @Override
+    public void onDestroyView(){
+        unbinder.unbind();
+
+        Dialog dialog = getDialog();
+
+        if (dialog != null && getRetainInstance()){
+            dialog.setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 }

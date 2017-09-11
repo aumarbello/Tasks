@@ -21,13 +21,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".presentation.TaskContainer">
+        <activity android:name=".presentation.settings.SettingsActivity" />
+        <activity android:name=".presentation.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.settings.SettingsActivity" />
+        <activity android:name=".presentation.list.TaskListContainer" />
 
         <service android:name=".presentation.notifications.IndividualService" />
         <service android:name=".presentation.notifications.DailyService" />
@@ -37,12 +38,16 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
+
         <receiver android:name=".presentation.notifications.IndividualReceiver"
             android:exported="false">
             <intent-filter android:priority="-999">
                 <action android:name="com.example.ahmed.simpdo.presentation.notifications"/>
             </intent-filter>
         </receiver>
+
+
         <receiver android:name=".presentation.notifications.DailyReceiver"
             android:exported="false">
             <intent-filter android:priority="-999">

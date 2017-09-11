@@ -17,7 +17,7 @@ import javax.inject.Singleton;
 /**
  * Created by ahmed on 8/24/17.
  */
-@Singleton
+
 public class TaskDAO {
     private SQLiteDatabase database;
     private Helper dbHelper;
