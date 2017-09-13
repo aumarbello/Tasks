@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -270,10 +271,8 @@ public class TaskListFragment extends BackgroundFragment implements
     private void createSections(){
         for (String segment : dayString) {
             List<Task> taskList = getDayTask(segment);
-            if (taskList.size() != 0){
-                adapter.addSection(segment, new TaskSection(segment, taskList, this,
-                        preferences));
-            }
+            adapter.addSection(segment, new TaskSection(segment, taskList, this,
+                    preferences));
             //todo else show empty view
         }
     }
@@ -300,9 +299,9 @@ public class TaskListFragment extends BackgroundFragment implements
         adapter.notifyItemRemovedFromSection(getTaskSectionTag(task),
                 taskPositionInSection);
 
-//        if (currentSection.isSectionEmpty()){
-            //todo show empty view
-//        }
+        if (currentSection.isSectionEmpty()){
+            Log.d(TAG, "Section is empty");
+        }
     }
 
     public void updateAfterAdding(Task task){

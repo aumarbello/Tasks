@@ -47,4 +47,5 @@
 
     <string name="defaultCategory">Important</string>
     <string name="done">Done</string>
+    <string name="empty_list">No Tasks Today</string>
 </resources>

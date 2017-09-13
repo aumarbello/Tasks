@@ -1,7 +1,6 @@
 package com.example.ahmed.simpdo.presentation.list;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,43 +34,20 @@ class SwipeTouchListener implements View.OnTouchListener {
         }
 
         @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY){
-            boolean result = false;
-
-                float diffY = event2.getY() - event1.getY();
-                float diffX = event2.getX() - event1.getX();
-
-                if (Math.abs(diffX) > Math.abs(diffY)){
-                    if (Math.abs(diffX) > SWIPE_THRESHOLD
-                            && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD){
-                        if (diffX > 0){
-                            Log.d("SwipeTouch", "Swiped to the right");
-                        }else{
-                            holder.onSwipe();
-                        }
-                        result = true;
-                    }else if (Math.abs(diffY) > SWIPE_THRESHOLD
-                            && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD){
-                        if (diffX > 0){
-                            Log.d("SwipeTouch", "Swiped to the bottom");
-                        }else {
-                            Log.d("SwipeTouch", "Swiped to the top");
-                        }
-                        result = true;
-                    }
-                }
-            return result;
-        }
-
-        @Override
         public void onLongPress(MotionEvent event) {
             holder.onLongClick();
         }
 
-        public boolean onSingleTapUp(MotionEvent event) {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent event) {
             holder.onClick();
             return true;
         }
 
+        @Override
+        public boolean onDoubleTap(MotionEvent event){
+            holder.onDoubleTap();
+            return true;
+        }
     }
 }

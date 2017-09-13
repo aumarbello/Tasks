@@ -4,8 +4,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +31,7 @@ class TaskSection extends StatelessSection{
                 TaskPref pref) {
         super(new SectionParameters.Builder(R.layout.task_list_item)
                     .headerResourceId(R.layout.task_item_header)
+                    .emptyResourceId()
                      .build());
 
         this.title = title;
@@ -131,34 +130,11 @@ class TaskSection extends StatelessSection{
             taskListFragment.viewTask(task, position);
         }
 
-        void onSwipe(){
-            Animation leave = AnimationUtils.loadAnimation(taskListFragment.getActivity(), R.anim.leave_left);
-            itemView.startAnimation(leave);
-            leave.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    enter();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-        }
-
-        void enter(){
+        void onDoubleTap(){
             task.setDone(true);
             isDone.setVisibility(View.VISIBLE);
             taskListFragment.updateTask(task);
-            Animation enter = AnimationUtils.loadAnimation(taskListFragment.getActivity(), R.anim.enter_right);
             itemView.setBackgroundColor(pref.getDoneTaskColor());
-            itemView.startAnimation(enter);
         }
 
         void onLongClick() {
