@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +35,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
 /**
@@ -271,9 +271,15 @@ public class TaskListFragment extends BackgroundFragment implements
     private void createSections(){
         for (String segment : dayString) {
             List<Task> taskList = getDayTask(segment);
-            adapter.addSection(segment, new TaskSection(segment, taskList, this,
-                    preferences));
-            //todo else show empty view
+            if (taskList.size() != 0){
+                adapter.addSection(segment, new TaskSection(segment, taskList, this,
+                        preferences));
+            }else {
+                TaskSection section = new TaskSection(segment, taskList, this,
+                        preferences);
+                section.setState(Section.State.EMPTY);
+                adapter.addSection(segment, section);
+            }
         }
     }
 
@@ -300,7 +306,7 @@ public class TaskListFragment extends BackgroundFragment implements
                 taskPositionInSection);
 
         if (currentSection.isSectionEmpty()){
-            Log.d(TAG, "Section is empty");
+            currentSection.setState(Section.State.EMPTY);
         }
     }
 

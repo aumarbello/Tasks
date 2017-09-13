@@ -15,14 +15,14 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
-import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 
 /**
  * Created by ahmed on 8/25/17.
  */
 
-class TaskSection extends StatelessSection{
+class TaskSection extends Section{
     private String title;
     private List<Task> taskList;
     private TaskListFragment taskListFragment;
@@ -31,7 +31,7 @@ class TaskSection extends StatelessSection{
                 TaskPref pref) {
         super(new SectionParameters.Builder(R.layout.task_list_item)
                     .headerResourceId(R.layout.task_item_header)
-                    .emptyResourceId()
+                    .emptyResourceId(R.layout.empty_list)
                      .build());
 
         this.title = title;
@@ -66,6 +66,17 @@ class TaskSection extends StatelessSection{
         TaskSectionHolder sectionHolder = (TaskSectionHolder) holder;
 
         sectionHolder.bindHeader(title);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder getEmptyViewHolder(View view){
+        return new TaskEmptyHolder(view);
+    }
+
+    @Override
+    public void onBindEmptyViewHolder(RecyclerView.ViewHolder holder){
+        TaskEmptyHolder emptyHolder = (TaskEmptyHolder) holder;
+        emptyHolder.bindEmptyView(title);
     }
 
     void addTaskToList(Task task){
@@ -226,6 +237,19 @@ class TaskSection extends StatelessSection{
                     break;
                 }
             }
+        }
+    }
+
+    private class TaskEmptyHolder extends RecyclerView.ViewHolder{
+        private TextView emptyView;
+        TaskEmptyHolder(View itemView) {
+            super(itemView);
+
+            emptyView = itemView.findViewById(R.id.empty_list_view);
+        }
+
+        void bindEmptyView(String segment){
+            emptyView.setText(taskListFragment.getString((R.string.no_tasks), segment));
         }
     }
 }
