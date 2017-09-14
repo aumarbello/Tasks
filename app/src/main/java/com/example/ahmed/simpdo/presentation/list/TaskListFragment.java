@@ -59,7 +59,6 @@ public class TaskListFragment extends BackgroundFragment implements
     private Calendar todayCalender;
     private Calendar taskCalender;
     private DatePickerDialog dateDialog;
-    private TimePickerDialog timeDialog;
     private DetailsDialog detailsDialog;
     private ViewTaskFragment viewDialog;
     private EditTaskFragment editDialog;
@@ -68,6 +67,7 @@ public class TaskListFragment extends BackgroundFragment implements
     private int daysSectionValue;
     private List<String> dayString;
     private AllTasks allTasks;
+    private Task task;
 
     @BindView(R.id.task_list)
     RecyclerView taskListView;
@@ -82,6 +82,7 @@ public class TaskListFragment extends BackgroundFragment implements
         setRetainInstance(true);
         ((App)getActivity().getApplication()).getComponent().inject(this);
         adapter = new SectionedRecyclerViewAdapter();
+        task = new Task();
 
         Bundle args = getArguments();
         allTasks = new AllTasks();
@@ -131,7 +132,7 @@ public class TaskListFragment extends BackgroundFragment implements
 
         unbinder = ButterKnife.bind(this, view);
 
-        addTask.setOnClickListener(fab -> showCalender());
+        addTask.setOnClickListener(fab -> showDetailsDialog());
 
         taskListView.setLayoutManager(new LinearLayoutManager(getActivity()));
         createSections();
@@ -193,12 +194,15 @@ public class TaskListFragment extends BackgroundFragment implements
         updateAfterDelete(task);
     }
 
+
+    //dialogs
     private void showCalender(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             dateDialog = new DatePickerDialog(getActivity(),
                     android.R.style.Theme_Material_Light_Dialog_Alert,
                     (datePicker, year, month, day) -> {
                         taskCalender.set(year, month, day);
+                        dateDialog.dismiss();
                         showTimePicker();
                     },
                     todayCalender.get(Calendar.YEAR),
@@ -208,6 +212,7 @@ public class TaskListFragment extends BackgroundFragment implements
             dateDialog = new DatePickerDialog(getActivity(),
                     (datePicker, year, month, day) -> {
                         taskCalender.set(year, month, day);
+                        dateDialog.dismiss();
                         showTimePicker();
                     },
                     todayCalender.get(Calendar.YEAR),
@@ -219,14 +224,16 @@ public class TaskListFragment extends BackgroundFragment implements
     }
 
     private void showTimePicker() {
-        dateDialog.dismiss();
+        TimePickerDialog timeDialog;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             timeDialog = new TimePickerDialog(getActivity(),
                     android.R.style.Theme_Material_Light_Dialog_Alert,
                     (timePicker, hour, minute) -> {
                         taskCalender.set(Calendar.HOUR_OF_DAY, hour);
                         taskCalender.set(Calendar.MINUTE, minute);
-                        showDetailsDialog();
+                        task.setTaskDate(taskCalender);
+                        presenter.addTask(task);
+                        updateAfterAdding(task);
                     },
                     todayCalender.get(Calendar.HOUR_OF_DAY),
                     todayCalender.get(Calendar.MINUTE), false);
@@ -235,7 +242,9 @@ public class TaskListFragment extends BackgroundFragment implements
                     (timePicker, hour, minute) -> {
                         taskCalender.set(Calendar.HOUR_OF_DAY, hour);
                         taskCalender.set(Calendar.MINUTE, minute);
-                        showDetailsDialog();
+                        task.setTaskDate(taskCalender);
+                        presenter.addTask(task);
+                        updateAfterAdding(task);
                     },
                     todayCalender.get(Calendar.HOUR_OF_DAY),
                     todayCalender.get(Calendar.MINUTE), false);
@@ -245,7 +254,6 @@ public class TaskListFragment extends BackgroundFragment implements
     }
 
     private void showDetailsDialog(){
-        timeDialog.dismiss();
         detailsDialog = DetailsDialog.getInstance();
         detailsDialog.setTargetFragment(this, 101011);
         detailsDialog.show(getFragmentManager(), "Task Details");
@@ -253,19 +261,16 @@ public class TaskListFragment extends BackgroundFragment implements
 
     //details dialog callBack method
     @Override
-    public void createTask(String title, String description, String category) {
-        detailsDialog.dismiss();
-        Task task = new Task();
-        task.setTaskDate(taskCalender);
+    public void showCalenderDialog(String title, String description,
+                                   String category, int repeatTask, int alarmTime) {
         task.setTaskTitle(title);
         task.setTaskDesc(description);
 
         if (category != null) {
             task.setUrgent(category.equals("Important"));
         }
-
-        presenter.addTask(task);
-        updateAfterAdding(task);
+        detailsDialog.dismiss();
+        showCalender();
     }
 
     private void createSections(){

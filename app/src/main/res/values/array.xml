@@ -6,6 +6,23 @@
         <item>Normal</item>
     </string-array>
 
+    <string-array name="repeat_tasks">
+        <item>[Repeat Task]</item>
+        <item>Don't Repeat</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+
+    <string-array name="alarm_time">
+        <item>[Alarm Time]</item>
+        <item>On Task\'s Time</item>
+        <item>15 minutes before task</item>
+        <item>30 minutes before task</item>
+        <item>45 minutes before task</item>
+        <item>One hour before task</item>
+    </string-array>
+
     <string-array name="number_of_days_entries">
         <item>3</item>
         <item>5</item>
