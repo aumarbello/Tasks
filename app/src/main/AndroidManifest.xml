@@ -31,7 +31,6 @@
         <activity android:name=".presentation.list.TaskListContainer" />
 
         <service android:name=".presentation.notifications.IndividualService" />
-        <service android:name=".presentation.notifications.DailyService" />
 
         <receiver android:name=".presentation.notifications.TaskReceiver">
             <intent-filter>
@@ -44,14 +43,6 @@
             android:exported="false">
             <intent-filter android:priority="-999">
                 <action android:name="com.example.ahmed.simpdo.presentation.notifications"/>
-            </intent-filter>
-        </receiver>
-
-
-        <receiver android:name=".presentation.notifications.DailyReceiver"
-            android:exported="false">
-            <intent-filter android:priority="-999">
-                <action android:name="com.example.ahmed.simpdo.presentation.notifications.dailyService"/>
             </intent-filter>
         </receiver>
     </application>

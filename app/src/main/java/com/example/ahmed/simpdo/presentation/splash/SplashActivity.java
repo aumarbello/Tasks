@@ -9,8 +9,6 @@ import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.db.TaskDAO;
 import com.example.ahmed.simpdo.data.model.AllTasks;
 import com.example.ahmed.simpdo.presentation.list.TaskListContainer;
-import com.example.ahmed.simpdo.presentation.notifications.DailyService;
-import com.example.ahmed.simpdo.presentation.notifications.IndividualService;
 
 import javax.inject.Inject;
 

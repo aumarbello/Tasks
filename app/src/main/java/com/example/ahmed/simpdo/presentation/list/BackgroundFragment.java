@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import com.example.ahmed.simpdo.presentation.notifications.DailyService;
 import com.example.ahmed.simpdo.presentation.notifications.IndividualService;
 
 /**
