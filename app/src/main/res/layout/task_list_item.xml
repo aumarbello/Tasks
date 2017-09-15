@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -36,22 +37,11 @@
                 />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/isimportant"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/important"
-            android:layout_margin="10dp"
-            android:id="@+id/task_important"
-            />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/task_done"
             android:textSize="15sp"
-            android:layout_below="@id/task_important"
             android:layout_alignParentEnd="true"
             android:maxLines="1"
             android:text="@string/done"

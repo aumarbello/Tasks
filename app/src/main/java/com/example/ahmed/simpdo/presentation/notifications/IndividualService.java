@@ -53,9 +53,6 @@ public class IndividualService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        TaskDAO taskDAO = new TaskDAO(this);
-        taskDAO.open();
-
         Log.d(TAG, "IndividualService started");
         ((App)getApplicationContext()).getComponent().inject(this);
 
@@ -65,54 +62,43 @@ public class IndividualService extends IntentService {
         int hour = today.get(Calendar.HOUR_OF_DAY);
         boolean showNotification = false;
 
-        int category = pref.getNotificationCategory();
         int dayOfYear = today.get(Calendar.DAY_OF_YEAR);
 
-        List<Task> taskList = taskDAO.getAllTasks();
-        List<Task> todayTaskList = new ArrayList<>();
 
-        for (Task task : taskList) {
-            int taskDay = task.getTaskDate().get(Calendar.DAY_OF_YEAR);
-            if (taskDay == dayOfYear){
-                todayTaskList.add(task);
-            }
-        }
-
-        for (Task task : todayTaskList) {
+        for (Task task : getDaysTask()) {
             int taskHour = task.getTaskDate().get(Calendar.HOUR_OF_DAY);
 
-            switch (category){
-                case 0:
-                    if (hour == taskHour){
-                        dueTask.append("Task ")
-                                .append(task.getTaskTitle())
-                                .append(" is Due.\n");
-                        showNotification = true;
-                        taskCount++;
-                    }
-                    break;
-                case 1:
-                    if (hour == taskHour && !task.isUrgent()){
-                        dueTask.append("Task ")
-                                .append(task.getTaskTitle())
-                                .append(" is Due.\n");
-                        showNotification = true;
-                        taskCount++;
-                    }
-                    break;
-                case 2:
-                    if (hour == taskHour && task.isUrgent()){
-                        dueTask.append("Task ")
-                                .append(task.getTaskTitle())
-                                .append(" is Due.\n");
-                        showNotification = true;
-                        taskCount++;
-                    }
-                    break;
-
-            }
+//            switch (category){
+//                case 0:
+//                    if (hour == taskHour){
+//                        dueTask.append("Task ")
+//                                .append(task.getTaskTitle())
+//                                .append(" is Due.\n");
+//                        showNotification = true;
+//                        taskCount++;
+//                    }
+//                    break;
+//                case 1:
+//                    if (hour == taskHour && !task.isUrgent()){
+//                        dueTask.append("Task ")
+//                                .append(task.getTaskTitle())
+//                                .append(" is Due.\n");
+//                        showNotification = true;
+//                        taskCount++;
+//                    }
+//                    break;
+//                case 2:
+//                    if (hour == taskHour && task.isUrgent()){
+//                        dueTask.append("Task ")
+//                                .append(task.getTaskTitle())
+//                                .append(" is Due.\n");
+//                        showNotification = true;
+//                        taskCount++;
+//                    }
+//                    break;
+//
+//            }
         }
-        taskDAO.close();
 
         if (showNotification) {
             showAlarmNotification();
@@ -168,5 +154,59 @@ public class IndividualService extends IntentService {
         i.putExtra(NOTIFICATION, notification);
         sendOrderedBroadcast(i, PRIVATE, null, null,
                 Activity.RESULT_OK, null, null);
+    }
+
+    private List<Task> getDaysTask(){
+        TaskDAO dao = new TaskDAO(this);
+        dao.open();
+        List<Task> allTasks = dao.getAllTasks();
+        dao.close();
+
+        List<Task> dayTask = new ArrayList<>();
+        int today = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+        for (Task task : allTasks) {
+            int taskDay = task.getTaskDate().get(Calendar.DAY_OF_YEAR);
+            if (today == taskDay){
+                dayTask.add(task);
+            }
+        }
+        return dayTask;
+    }
+
+    private boolean isTaskDue(Task task){
+        int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int currentMinute = Calendar.getInstance().get(Calendar.MINUTE);
+
+        int taskHour = task.getTaskDate().get(Calendar.HOUR_OF_DAY);
+        int taskMinute = task.getTaskDate().get(Calendar.MINUTE);
+
+        switch (task.getAlarmTime()){
+            case 0:
+                if (taskHour == currentHour && taskMinute == currentMinute){
+                    return true;
+                }
+                break;
+            case 1:
+                if (taskHour == currentHour && taskMinute == (currentMinute - 15)){
+                    return true;
+                }
+                break;
+            case 2:
+                if (taskHour == currentHour && taskMinute == (currentMinute - 30)){
+                    return true;
+                }
+                break;
+            case 3:
+                if (taskHour == currentHour && taskMinute == (currentMinute - 45)){
+                    return true;
+                }
+                break;
+            case 4:
+                if (taskHour == (currentHour - 1) && taskMinute == currentMinute){
+                    return true;
+                }
+                break;
+        }
+        return false;
     }
 }

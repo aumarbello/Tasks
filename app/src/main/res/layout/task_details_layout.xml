@@ -29,13 +29,6 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/category_spinner"
-        android:layout_margin="20dp"
-        />
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/repeat_task"
         android:layout_margin="20dp"
         />

@@ -17,14 +17,6 @@
             android:dialogTitle="@string/number_of_days_dialog_title"
             android:title="@string/number_of_days_title"
             />
-        <ListPreference
-            android:defaultValue="2"
-            android:entries="@array/notification_entries"
-            android:entryValues="@array/notification_values"
-            android:key="@string/show_notification_key"
-            android:dialogTitle="@string/show_notification_dialog_title"
-            android:title="@string/show_notification_title"
-            />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Color">

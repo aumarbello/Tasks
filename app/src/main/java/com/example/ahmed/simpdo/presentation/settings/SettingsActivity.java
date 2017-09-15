@@ -95,8 +95,6 @@ public class SettingsActivity extends PreferenceCompat {
 
             addPreferencesFromResource(R.xml.settings_xml);
 
-            bindPreferenceSummaryToValue(findPreference(getString
-                    (R.string.show_notification_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.number_of_days_key)));
 
             Preference mailPref = findPreference(getString

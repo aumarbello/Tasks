@@ -15,7 +15,6 @@ import android.widget.Spinner;
 
 import com.example.ahmed.simpdo.R;
 
-import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -27,8 +26,7 @@ import butterknife.Unbinder;
 public class DetailsDialog extends DialogFragment {
     interface DetailsCallBack{
         void showCalenderDialog(String title, String description,
-                                String category, int repeatTask,
-                                int alarmTime);
+                                int repeatTask, int alarmTime);
     }
 
     public DetailsDialog(){
@@ -41,21 +39,14 @@ public class DetailsDialog extends DialogFragment {
     @BindView(R.id.add_task_description)
     AutoCompleteTextView descView;
 
-    @BindView(R.id.category_spinner)
-    Spinner categorySpinner;
-
     @BindView(R.id.alarm_time)
     Spinner alarmSpinner;
 
     @BindView(R.id.repeat_task)
     Spinner repeatSpinner;
 
-    @BindArray(R.array.categories)
-    String[] categories;
-
     private DetailsCallBack callBack;
     private Unbinder unbinder;
-    private String category;
     private static final String taskTitle = "title";
     private static final String taskDesc = "desc";
     private int alarmTimeSelected;
@@ -96,7 +87,6 @@ public class DetailsDialog extends DialogFragment {
             dialog = new AlertDialog.Builder(getActivity());
         }
 
-        setUpCategories();
         setUpRepeatTasks();
         setUpAlarmTime();
 
@@ -107,39 +97,9 @@ public class DetailsDialog extends DialogFragment {
                     String taskDescription = descView.getText().toString();
 
                     callBack.showCalenderDialog(taskTitle, taskDescription,
-                            category, repeatCategory, alarmTimeSelected);
+                            repeatCategory, alarmTimeSelected);
                 }))
                 .create();
-    }
-
-    private void setUpCategories(){
-        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.
-                createFromResource(getActivity(), R.array.categories,
-                        android.R.layout.simple_spinner_item);
-        categoryAdapter.setDropDownViewResource
-                (android.R.layout.simple_spinner_dropdown_item);
-        categorySpinner.setAdapter(categoryAdapter);
-        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i){
-                    case 0:
-                        //header
-                        break;
-                    case 1:
-                        category = categories[1];
-                        break;
-                    case 2:
-                        category = categories[2];
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                category = categories[2];
-            }
-        });
     }
 
     private void setUpAlarmTime() {

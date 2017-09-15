@@ -60,9 +60,6 @@ public class EditTaskFragment extends DialogFragment {
     @BindView(R.id.edit_task_time)
     TextView timeView;
 
-    @BindView(R.id.select_new_category)
-    Spinner categorySpinner;
-
     @BindView(R.id.select_alarm_time)
     Spinner alarmSpinner;
 
@@ -137,7 +134,6 @@ public class EditTaskFragment extends DialogFragment {
         dateView.setOnClickListener(v -> openDateDialog());
         timeView.setOnClickListener(v -> openTimeDialog());
 
-        setUpCategorySpinner();
         setUpRepeatTaskSpinner();
         setUpAlarmTimeSpinner();
 
@@ -250,37 +246,6 @@ public class EditTaskFragment extends DialogFragment {
     private String timeString(Calendar calendar){
         SimpleDateFormat sdf = new SimpleDateFormat("HH: mm", Locale.US);
         return sdf.format(calendar.getTime());
-    }
-
-    private void setUpCategorySpinner(){
-        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.
-                createFromResource(getActivity(), R.array.categories,
-                        android.R.layout.simple_spinner_item);
-        categoryAdapter.setDropDownViewResource
-                (android.R.layout.simple_spinner_dropdown_item);
-        categorySpinner.setAdapter(categoryAdapter);
-        categorySpinner.setSelection(currentTask.isUrgent() ? 1 : 2);
-        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i){
-                    case 0:
-                        //categorySpinner header
-                        break;
-                    case 1:
-                        currentTask.setUrgent(true);
-                        break;
-                    case 2:
-                        currentTask.setUrgent(false);
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
     private void openDateDialog(){

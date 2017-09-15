@@ -4,7 +4,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ahmed.simpdo.R;
@@ -98,7 +97,6 @@ class TaskSection extends Section{
     class TaskViewHolder extends RecyclerView.ViewHolder{
         private TextView taskTitle;
         private TextView taskDate;
-        private ImageView isImportant;
         private TextView isDone;
         private TextView alarmTime;
         private TextView repeatCategory;
@@ -110,7 +108,6 @@ class TaskSection extends Section{
 
             taskTitle = itemView.findViewById(R.id.task_title);
             taskDate = itemView.findViewById(R.id.task_time);
-            isImportant = itemView.findViewById(R.id.task_important);
             isDone = itemView.findViewById(R.id.task_done);
             alarmTime = itemView.findViewById(R.id.alarm_category);
             repeatCategory = itemView.findViewById(R.id.repeat_category);
@@ -131,7 +128,6 @@ class TaskSection extends Section{
 
             taskDate.setText(time);
 
-            isImportant.setVisibility(task.isUrgent() ? View.VISIBLE : View.GONE);
             isDone.setVisibility(task.isDone() ? View.VISIBLE: View.GONE);
 
             int color = pref.getDoneTaskColor();

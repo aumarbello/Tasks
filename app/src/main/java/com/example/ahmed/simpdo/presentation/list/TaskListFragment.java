@@ -281,15 +281,11 @@ public class TaskListFragment extends BackgroundFragment implements
     //details dialog callBack method
     @Override
     public void showCalenderDialog(String title, String description,
-                                   String category, int repeatTask, int alarmTime) {
+                                   int repeatTask, int alarmTime) {
         task.setTaskTitle(title);
         task.setTaskDesc(description);
         task.setAlarmTime(alarmTime);
         task.setRepeatCategory(repeatTask);
-
-        if (category != null) {
-            task.setUrgent(category.equals("Important"));
-        }
         detailsDialog.dismiss();
         showCalender();
     }

@@ -17,7 +17,6 @@ public class Task implements Serializable{
     private Calendar taskDate;
     private int repeatCategory;
     private int alarmTime;
-    private boolean isUrgent;
     private boolean isDone;
 
     public Task(){
@@ -57,30 +56,17 @@ public class Task implements Serializable{
         this.taskDate = taskDate;
     }
 
-    public boolean isUrgent() {
-        return isUrgent;
-    }
-
-    public void setUrgent(boolean urgent) {
-        isUrgent = urgent;
-    }
-
     @Override
     public String toString(){
         return "Task Title: " + taskTitle + "\n"
                 + "Task Description: " + taskDesc + "\n"
-                + "Task Date: " + formatDate(taskDate) + "\n"
-                + "Task Category: " + category(isUrgent);
+                + "Task Date: " + formatDate(taskDate);
     }
 
     private String formatDate(Calendar calendar){
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy 'at' h:mm a",
                 Locale.US);
         return sdf.format(calendar.getTime());
-    }
-
-    private String category(boolean isUrgent){
-        return isUrgent ? "Important" : "Normal";
     }
 
     public boolean isDone() {
