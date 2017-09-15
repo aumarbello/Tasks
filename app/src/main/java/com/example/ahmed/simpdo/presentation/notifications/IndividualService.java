@@ -41,7 +41,6 @@ public class IndividualService extends IntentService {
     @Inject
     TaskPref pref;
     private StringBuilder dueTask;
-    private int taskCount;
 
     public IndividualService() {
         super(TAG);
@@ -66,42 +65,16 @@ public class IndividualService extends IntentService {
 
 
         for (Task task : getDaysTask()) {
-            int taskHour = task.getTaskDate().get(Calendar.HOUR_OF_DAY);
+            dueTask.append("Due task: ");
+            if (isTaskDue(task)){
+                showNotification = true;
+                dueTask.append(task.getTaskTitle());
+            }
+            dueTask.append("\n");
 
-//            switch (category){
-//                case 0:
-//                    if (hour == taskHour){
-//                        dueTask.append("Task ")
-//                                .append(task.getTaskTitle())
-//                                .append(" is Due.\n");
-//                        showNotification = true;
-//                        taskCount++;
-//                    }
-//                    break;
-//                case 1:
-//                    if (hour == taskHour && !task.isUrgent()){
-//                        dueTask.append("Task ")
-//                                .append(task.getTaskTitle())
-//                                .append(" is Due.\n");
-//                        showNotification = true;
-//                        taskCount++;
-//                    }
-//                    break;
-//                case 2:
-//                    if (hour == taskHour && task.isUrgent()){
-//                        dueTask.append("Task ")
-//                                .append(task.getTaskTitle())
-//                                .append(" is Due.\n");
-//                        showNotification = true;
-//                        taskCount++;
-//                    }
-//                    break;
-//
-//            }
-        }
-
-        if (showNotification) {
-            showAlarmNotification();
+            if (showNotification){
+                showAlarmNotification();
+            }
         }
     }
 
@@ -140,7 +113,6 @@ public class IndividualService extends IntentService {
                 .setContentIntent(pI)
                 .setAutoCancel(true)
                 .setShowWhen(true)
-                .setNumber(taskCount)
                 .build();
 
         notification.when = Calendar.getInstance().getTimeInMillis();
