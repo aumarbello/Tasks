@@ -100,6 +100,8 @@ class TaskSection extends Section{
         private TextView taskDate;
         private ImageView isImportant;
         private TextView isDone;
+        private TextView alarmTime;
+        private TextView repeatCategory;
         private Task task;
         private int position;
 
@@ -110,6 +112,8 @@ class TaskSection extends Section{
             taskDate = itemView.findViewById(R.id.task_time);
             isImportant = itemView.findViewById(R.id.task_important);
             isDone = itemView.findViewById(R.id.task_done);
+            alarmTime = itemView.findViewById(R.id.alarm_category);
+            repeatCategory = itemView.findViewById(R.id.repeat_category);
 
             itemView.setOnTouchListener(new SwipeTouchListener(
                     taskListFragment.getActivity(), this));
@@ -134,6 +138,46 @@ class TaskSection extends Section{
 
             if (task.isDone()){
                 itemView.setBackgroundColor(color);
+            }
+
+            switch (task.getAlarmTime()){
+                case 0:
+                    alarmTime.setText(R.string.on_task_time);
+                    break;
+                case 1:
+                    alarmTime.setText(taskListFragment.getString
+                            (R.string.x_before, "15 minutes"));
+                    break;
+                case 2:
+                    alarmTime.setText(taskListFragment.getString
+                            (R.string.x_before, "30 minutes"));
+                    break;
+                case 3:
+                    alarmTime.setText(taskListFragment.getString
+                            (R.string.x_before, "45 minutes"));
+                    break;
+                case 4:
+                    alarmTime.setText(taskListFragment.getString
+                            (R.string.x_before, "1 hour"));
+                    break;
+            }
+
+            switch (task.getRepeatCategory()){
+                case 0:
+                    repeatCategory.setText(R.string.does_not_repeat);
+                    break;
+                case 1:
+                    repeatCategory.setText(taskListFragment.
+                            getString(R.string.repeats_x, "Week"));
+                    break;
+                case 2:
+                    repeatCategory.setText(taskListFragment.
+                            getString(R.string.repeats_x, "Month"));
+                    break;
+                case 3:
+                    repeatCategory.setText(taskListFragment.
+                            getString(R.string.repeats_x, "Year"));
+                    break;
             }
         }
 
@@ -188,51 +232,15 @@ class TaskSection extends Section{
                     headerView.setBackgroundColor(color);
                     break;
                 }
-                case "Monday": {
+                case "Others": {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.monday);
-                    headerView.setBackgroundColor(color);
-                    break;
-                }
-                case "Tuesday": {
-                    headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.tuesday);
-                    headerView.setBackgroundColor(color);
-                    break;
-                }
-                case "Wednesday": {
-                    headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.wednesday);
-                    headerView.setBackgroundColor(color);
-                    break;
-                }
-                case "Thursday": {
-                    headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.thursday);
-                    headerView.setBackgroundColor(color);
-                    break;
-                }
-                case "Friday": {
-                    headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.friday);
-                    headerView.setBackgroundColor(color);
-                    break;
-                }
-                case "Saturday": {
-                    headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.saturday);
-                    headerView.setBackgroundColor(color);
-                    break;
-                }
-                case "Sunday": {
-                    headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.sunday);
+                    int color = headerView.getResources().getColor(R.color.others);
                     headerView.setBackgroundColor(color);
                     break;
                 }
                 default: {
                     headerView.setText(headerTitle);
-                    int color = headerView.getResources().getColor(R.color.others);
+                    int color = headerView.getResources().getColor(R.color.daily);
                     headerView.setBackgroundColor(color);
                     break;
                 }

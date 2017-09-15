@@ -45,8 +45,18 @@
     <string name="contact_developer_summary">Got Any Queries? Send Mail to Developer</string>
     <string name="settings">Settings</string>
 
+    <!--more strings-->
     <string name="defaultCategory">Important</string>
     <string name="done">Done</string>
     <string name="empty_list">No Tasks Today</string>
     <string name="no_tasks">No tasks on %s</string>
+    <string name="repeats">Repeats:</string>
+    <string name="alarm_time">Alarm Time</string>
+    <string name="open_calender">Open Calender</string>
+
+    <string name="on_task_time">On Task\'s Time</string>
+    <string name="x_before">%s before Task</string>
+
+    <string name="does_not_repeat">Task Does not Repeat</string>
+    <string name="repeats_x">Repeats Every %s</string>
 </resources>

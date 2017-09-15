@@ -15,6 +15,8 @@ public class Task implements Serializable{
     private String taskTitle;
     private String taskDesc;
     private Calendar taskDate;
+    private int repeatCategory;
+    private int alarmTime;
     private boolean isUrgent;
     private boolean isDone;
 
@@ -65,10 +67,10 @@ public class Task implements Serializable{
 
     @Override
     public String toString(){
-        return "* Task Title: " + taskTitle + "\n"
-                + "* Task Description: " + taskDesc + "\n"
-                + "* Task Date: " + formatDate(taskDate) + "\n"
-                + "* Task Category: " + category(isUrgent);
+        return "Task Title: " + taskTitle + "\n"
+                + "Task Description: " + taskDesc + "\n"
+                + "Task Date: " + formatDate(taskDate) + "\n"
+                + "Task Category: " + category(isUrgent);
     }
 
     private String formatDate(Calendar calendar){
@@ -87,5 +89,21 @@ public class Task implements Serializable{
 
     public void setDone(boolean done) {
         isDone = done;
+    }
+
+    public int getRepeatCategory() {
+        return repeatCategory;
+    }
+
+    public void setRepeatCategory(int repeatCategory) {
+        this.repeatCategory = repeatCategory;
+    }
+
+    public int getAlarmTime() {
+        return alarmTime;
+    }
+
+    public void setAlarmTime(int alarmTime) {
+        this.alarmTime = alarmTime;
     }
 }

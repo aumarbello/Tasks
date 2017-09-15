@@ -3,6 +3,7 @@ package com.example.ahmed.simpdo.presentation.list;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +48,10 @@ public class TaskListFragment extends BackgroundFragment implements
         ViewTaskFragment.CallBack,
         EditTaskFragment.CallBack{
 
+    interface Callback{
+        void openCalender();
+    }
+
     @Inject
     TaskListPresenter presenter;
 
@@ -68,6 +73,7 @@ public class TaskListFragment extends BackgroundFragment implements
     private List<String> dayString;
     private AllTasks allTasks;
     private Task task;
+    private Callback callback;
 
     @BindView(R.id.task_list)
     RecyclerView taskListView;
@@ -148,6 +154,17 @@ public class TaskListFragment extends BackgroundFragment implements
     }
 
     @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        if (context instanceof Callback){
+            callback = (Callback) context;
+        }else
+            throw new RuntimeException("Container Activity must implement " +
+                    "Callback interface");
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         inflater.inflate(R.menu.list_menu, menu);
     }
@@ -158,6 +175,8 @@ public class TaskListFragment extends BackgroundFragment implements
             case R.id.settings:
                 startActivity(new Intent(getActivity(), SettingsActivity.class));
                 return true;
+            case R.id.calender_view:
+                callback.openCalender();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -174,7 +193,7 @@ public class TaskListFragment extends BackgroundFragment implements
         return getTaskList.getTasks(segment, dayString);
     }
 
-    //view task fragment call back
+    //view task listFragment call back
     //also called from list menu
     @Override
     public void editTask(Task task, int position){
@@ -265,6 +284,8 @@ public class TaskListFragment extends BackgroundFragment implements
                                    String category, int repeatTask, int alarmTime) {
         task.setTaskTitle(title);
         task.setTaskDesc(description);
+        task.setAlarmTime(alarmTime);
+        task.setRepeatCategory(repeatTask);
 
         if (category != null) {
             task.setUrgent(category.equals("Important"));

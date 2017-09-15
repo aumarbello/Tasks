@@ -21,7 +21,7 @@ public abstract class BackgroundFragment extends Fragment {
     private BroadcastReceiver importantReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Receiving this intent means the fragment is visible
+            // Receiving this intent means the listFragment is visible
             // hence it's cancelled
             Log.d(TAG, "canceling individual notification");
             setResultCode(Activity.RESULT_CANCELED);
@@ -31,7 +31,7 @@ public abstract class BackgroundFragment extends Fragment {
     private BroadcastReceiver dailyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Receiving this intent means the fragment is visible
+            // Receiving this intent means the listFragment is visible
             // hence it's cancelled
             Log.d(TAG, "canceling daily notification");
             setResultCode(Activity.RESULT_CANCELED);

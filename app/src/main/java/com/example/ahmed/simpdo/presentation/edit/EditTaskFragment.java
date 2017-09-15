@@ -61,7 +61,13 @@ public class EditTaskFragment extends DialogFragment {
     TextView timeView;
 
     @BindView(R.id.select_new_category)
-    Spinner spinner;
+    Spinner categorySpinner;
+
+    @BindView(R.id.select_alarm_time)
+    Spinner alarmSpinner;
+
+    @BindView(R.id.select_repeat_time)
+    Spinner repeatSpinner;
 
     private Task currentTask;
     private Unbinder unbinder;
@@ -131,7 +137,9 @@ public class EditTaskFragment extends DialogFragment {
         dateView.setOnClickListener(v -> openDateDialog());
         timeView.setOnClickListener(v -> openTimeDialog());
 
-        setUpSpinner();
+        setUpCategorySpinner();
+        setUpRepeatTaskSpinner();
+        setUpAlarmTimeSpinner();
 
          return dialog.setView(view)
                 .setTitle("Edit Task")
@@ -146,6 +154,94 @@ public class EditTaskFragment extends DialogFragment {
                 .create();
     }
 
+    private void setUpAlarmTimeSpinner() {
+        ArrayAdapter<CharSequence> alarmAdapter = ArrayAdapter
+                .createFromResource(getContext(), R.array.alarm_time,
+                        android.R.layout.simple_spinner_item);
+        alarmAdapter.setDropDownViewResource
+                (android.R.layout.simple_spinner_dropdown_item);
+        alarmSpinner.setAdapter(alarmAdapter);
+        alarmSpinner.setSelection(currentTask.getAlarmTime() + 1);
+        alarmSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view,
+                                       int position, long id) {
+                switch (position){
+                    case 0:
+                        //header
+                        break;
+                    case 1:
+                        currentTask.setAlarmTime(0);
+                        //at task's time
+                        break;
+                    case 2:
+                        currentTask.setAlarmTime(1);
+                        //15 before task
+                        break;
+                    case 3:
+                        currentTask.setAlarmTime(2);
+                        //30 before task
+                        break;
+                    case 4:
+                        currentTask.setAlarmTime(3);
+                        //45 before task
+                        break;
+                    case 5:
+                        currentTask.setAlarmTime(4);
+                        //1 hour before task
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void setUpRepeatTaskSpinner() {
+        ArrayAdapter<CharSequence> repeatAdapter = ArrayAdapter
+                .createFromResource(getContext(), R.array.repeat_tasks,
+                        android.R.layout.simple_spinner_item);
+        repeatAdapter.setDropDownViewResource
+                (android.R.layout.simple_spinner_dropdown_item);
+
+        repeatSpinner.setSelection(currentTask.getRepeatCategory() + 1);
+        repeatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view,
+                                       int position, long id) {
+                switch (position){
+                    case 0:
+                        //header
+                        break;
+                    case 1:
+                        currentTask.setRepeatCategory(0);
+                        //do not repeat
+                        break;
+                    case 2:
+                        currentTask.setRepeatCategory(1);
+                        //weekly
+                        break;
+                    case 3:
+                        currentTask.setRepeatCategory(2);
+                        //monthly
+                        break;
+                    case 4:
+                        currentTask.setRepeatCategory(3);
+                        //yearly
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
     private String dateString(Calendar calendar){
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
         return sdf.format(calendar.getTime());
@@ -156,19 +252,20 @@ public class EditTaskFragment extends DialogFragment {
         return sdf.format(calendar.getTime());
     }
 
-    private void setUpSpinner(){
+    private void setUpCategorySpinner(){
         ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.
                 createFromResource(getActivity(), R.array.categories,
                         android.R.layout.simple_spinner_item);
         categoryAdapter.setDropDownViewResource
                 (android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(categoryAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        categorySpinner.setAdapter(categoryAdapter);
+        categorySpinner.setSelection(currentTask.isUrgent() ? 1 : 2);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
                     case 0:
-                        //spinner header
+                        //categorySpinner header
                         break;
                     case 1:
                         currentTask.setUrgent(true);

@@ -12,8 +12,6 @@ import java.util.List;
 
 import static com.example.ahmed.simpdo.utils.DBSchema.*;
 
-import javax.inject.Singleton;
-
 /**
  * Created by ahmed on 8/24/17.
  */
@@ -80,6 +78,8 @@ public class TaskDAO {
         values.put(TASK_DATE, task.getTaskDate().getTimeInMillis());
         values.put(TASK_IMPORTANT, task.isUrgent() ? 0 : 1);
         values.put(TASK_DONE, task.isDone() ? 0 : 1);
+        values.put(TASK_ALARM_TIME, task.getAlarmTime());
+        values.put(TASK_REPEAT, task.getRepeatCategory());
         return values;
     }
 

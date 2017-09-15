@@ -16,16 +16,22 @@ import javax.inject.Inject;
  * Created by ahmed on 9/11/17.
  */
 
-public class TaskListContainer extends AppCompatActivity {
+public class TaskListContainer extends AppCompatActivity
+        implements TaskListFragment.Callback, CalenderFragment.CallBack {
     @Inject
-    TaskListFragment fragment;
+    TaskListFragment listFragment;
+
+    @Inject
+    CalenderFragment calenderFragment;
+
+    private FragmentManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         setContentView(R.layout.container);
 
-        FragmentManager manager = getSupportFragmentManager();
+        manager = getSupportFragmentManager();
 
         AllTasks allTasks = (AllTasks) getIntent().getSerializableExtra
                 (SplashActivity.taskList);
@@ -38,12 +44,42 @@ public class TaskListContainer extends AppCompatActivity {
         if (existingFragment == null) {
             Bundle args = new Bundle();
             args.putSerializable(SplashActivity.taskList, allTasks);
-            fragment.setArguments(args);
+            listFragment.setArguments(args);
 
             int count = manager.getBackStackEntryCount();
             manager.beginTransaction()
-                    .add(R.id.list_container, fragment)
+                    .add(R.id.list_container, listFragment)
                     .commit();
+        }
+    }
+
+    @Override
+    public void openCalender() {
+        manager.beginTransaction()
+                .replace(R.id.list_container, calenderFragment)
+                .commit();
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+
+    @Override
+    public void returnToList() {
+        manager.beginTransaction()
+                .replace(R.id.list_container, listFragment)
+                .commit();
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        Fragment currentFrag = manager.findFragmentById(R.id.list_container);
+
+        if (currentFrag.getClass().getName().equals(CalenderFragment.class.getName())){
+            returnToList();
         }
     }
 }

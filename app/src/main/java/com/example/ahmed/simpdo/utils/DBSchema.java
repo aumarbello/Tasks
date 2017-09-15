@@ -13,6 +13,8 @@ public final class DBSchema {
     public static final String TASK_DATE = "DATE";
     public static final String TASK_IMPORTANT = "IMPORTANT";
     public static final String TASK_DONE = "DONE";
+    public static final String TASK_ALARM_TIME = "ALARM_TIME";
+    public static final String TASK_REPEAT = "REPEAT_TASK";
 
     public static final String CREATE_TABLE = "create table if not exists " + TASK_TABLE + "(" +
             " _id integer primary key autoincrement, " +
@@ -22,7 +24,9 @@ public final class DBSchema {
             TASK_DESC + " text, " +
             TASK_IMPORTANT + " integer, " +
             TASK_DONE + " integer, " +
-            TASK_DATE + " long" +
+            TASK_DATE + " long, " +
+            TASK_ALARM_TIME + " integer, " +
+            TASK_REPEAT + " integer" +
             ")";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TASK_TABLE;

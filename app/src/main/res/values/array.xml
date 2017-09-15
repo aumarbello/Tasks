@@ -8,7 +8,7 @@
 
     <string-array name="repeat_tasks">
         <item>[Repeat Task]</item>
-        <item>Don't Repeat</item>
+        <item>Don\'t Repeat</item>
         <item>Weekly</item>
         <item>Monthly</item>
         <item>Yearly</item>

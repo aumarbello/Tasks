@@ -23,6 +23,22 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"/>
 
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/select_repeat_time"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/select_alarm_time"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,6 +55,7 @@
             android:text="@string/task_date"
             android:textSize="20sp"
             android:layout_alignParentStart="true"
+            android:textColor="@android:color/black"
             />
 
         <TextView
@@ -48,6 +65,7 @@
             android:text="@string/task_time"
             android:textSize="20sp"
             android:layout_alignParentEnd="true"
+            android:textColor="@android:color/black"
             />
     </RelativeLayout>
 
