@@ -98,6 +98,9 @@ dependencies {
     //colorPreference
     compile colorPreference
 
+    //others
+    compile 'com.squareup:android-times-square:1.6.5@aar'
+
     //tests
     testCompile jUnit
     testCompile mockito

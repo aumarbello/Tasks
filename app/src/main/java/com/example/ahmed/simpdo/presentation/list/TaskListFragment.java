@@ -388,4 +388,63 @@ public class TaskListFragment extends BackgroundFragment implements
     public void onSaveInstanceState(Bundle savedInstance){
         savedInstance.putSerializable(TAG, allTasks);
     }
+
+    private void addRepeatTask(Task task){
+        Calendar repeatCalender = Calendar.getInstance();
+        repeatCalender.setTimeInMillis(dateDialog.getDatePicker().getMaxDate());
+
+        Calendar taskCalender = task.getTaskDate();
+
+        int currentYear = taskCalender.get(Calendar.YEAR);
+        int maxYear = repeatCalender.get(Calendar.YEAR);
+
+        switch (task.getRepeatCategory()){
+            case 1:
+                int currentWeek = taskCalender.get(Calendar.WEEK_OF_YEAR);
+                int maxWeek = repeatCalender.getMaximum(Calendar.WEEK_OF_YEAR);
+
+                while (currentYear < maxYear){
+                    if (currentYear > todayCalender.get(Calendar.YEAR)){
+                        currentWeek = repeatCalender.getMinimum(Calendar.WEEK_OF_YEAR);
+                    }
+
+                    while (currentWeek < maxWeek){
+                        taskCalender.set(Calendar.WEEK_OF_YEAR, ++currentWeek);
+                        task.setTaskDate(taskCalender);
+                        presenter.addTask(task);
+                        updateAfterAdding(task);
+                    }
+                    currentYear++;
+                }
+                break;
+            case 2:
+                int currentMonth = taskCalender.get(Calendar.MONTH);
+                int maxMonth = repeatCalender.getMaximum(Calendar.MONTH);
+
+                while (currentYear < maxYear){
+                    if (currentYear > todayCalender.get(Calendar.YEAR)){
+                        currentMonth = repeatCalender.getMinimum(Calendar.MONTH);
+                    }
+
+                    while (currentMonth < maxMonth){
+                        taskCalender.set(Calendar.MONTH,
+                                ++currentMonth);
+                        task.setTaskDate(taskCalender);
+                        presenter.addTask(task);
+                        updateAfterAdding(task);
+                    }
+                    currentYear++;
+                }
+                break;
+            case 3:
+                while (currentYear < maxYear){
+                    taskCalender.set(Calendar.YEAR,
+                            ++currentYear);
+                    task.setTaskDate(taskCalender);
+                    presenter.addTask(task);
+                    updateAfterAdding(task);
+                }
+                break;
+        }
+    }
 }

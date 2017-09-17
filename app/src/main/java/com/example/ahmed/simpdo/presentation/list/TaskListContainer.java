@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
@@ -17,7 +18,7 @@ import javax.inject.Inject;
  */
 
 public class TaskListContainer extends AppCompatActivity
-        implements TaskListFragment.Callback, CalenderFragment.CallBack {
+        implements TaskListFragment.Callback{
     @Inject
     TaskListFragment listFragment;
 
@@ -63,8 +64,15 @@ public class TaskListContainer extends AppCompatActivity
         }
     }
 
-
     @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == android.R.id.home){
+            onBackPressed();
+            return true;
+        }
+        return false;
+    }
+
     public void returnToList() {
         manager.beginTransaction()
                 .replace(R.id.list_container, listFragment)

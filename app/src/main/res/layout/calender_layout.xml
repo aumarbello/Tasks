@@ -4,14 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <CalendarView
+    <com.squareup.timessquare.CalendarPickerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
         android:id="@+id/task_calender"/>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
         android:id="@+id/current_task_details"
         android:text="@string/task_description"
         android:textColor="@android:color/black"
