@@ -41,7 +41,6 @@ public class IndividualService extends IntentService {
     @Inject
     TaskPref pref;
     private StringBuilder dueTask;
-    private TaskDAO dao;
     private static final int alarmInterval = 60 * 1000;
 
     public IndividualService() {
@@ -131,7 +130,7 @@ public class IndividualService extends IntentService {
     }
 
     private List<Task> getDaysTask(){
-        dao = new TaskDAO(this);
+        TaskDAO dao = new TaskDAO(this);
         dao.open();
         List<Task> allTasks = dao.getAllTasks();
         dao.close();
@@ -157,70 +156,30 @@ public class IndividualService extends IntentService {
         switch (task.getAlarmTime()){
             case 0:
                 if (taskHour == currentHour && taskMinute == currentMinute){
-                    if (task.getRepeatCategory() != 0){
-                        repeatTask(task);
-                    }
                     return true;
                 }
                 break;
             case 1:
                 if (taskHour == currentHour && taskMinute == (currentMinute - 15)){
-                    if (task.getRepeatCategory() != 0){
-                        repeatTask(task);
-                    }
                     return true;
                 }
                 break;
             case 2:
                 if (taskHour == currentHour && taskMinute == (currentMinute - 30)){
-                    if (task.getRepeatCategory() != 0){
-                        repeatTask(task);
-                    }
                     return true;
                 }
                 break;
             case 3:
                 if (taskHour == currentHour && taskMinute == (currentMinute - 45)){
-                    if (task.getRepeatCategory() != 0){
-                        repeatTask(task);
-                    }
                     return true;
                 }
                 break;
             case 4:
                 if (taskHour == (currentHour - 1) && taskMinute == currentMinute){
-                    if (task.getRepeatCategory() != 0){
-                        repeatTask(task);
-                    }
                     return true;
                 }
                 break;
         }
         return false;
-    }
-
-    private void repeatTask(Task task){
-        dao.open();
-        Calendar calendar = task.getTaskDate();
-        switch (task.getRepeatCategory()){
-            case 1:
-                int day = calendar.get(Calendar.DAY_OF_YEAR);
-                calendar.set(Calendar.DAY_OF_YEAR, day + 7);
-                task.setTaskDate(calendar);
-                dao.addTask(task);
-                break;
-            case 2:
-                int month = calendar.get(Calendar.MONTH);
-                calendar.set(Calendar.MONTH, month + 1);
-                task.setTaskDate(calendar);
-                dao.addTask(task);
-                break;
-            case 3:
-                int year = calendar.get(Calendar.YEAR);
-                calendar.set(Calendar.YEAR, year + 1);
-                dao.addTask(task);
-                break;
-        }
-        dao.close();
     }
 }
