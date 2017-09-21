@@ -12,14 +12,22 @@ import java.util.List;
  * Created by ahmed on 9/6/17.
  */
 
-public class GetTaskList {
+class GetTaskList {
     private static final String TAG = "GetTaskList";
     private int section;
     private List<Task> taskList;
 
-    GetTaskList(int section, List<Task> taskList){
+    GetTaskList(int section, List<Task> tasks){
         this.section = section;
-        this.taskList = taskList;
+        this.taskList = new ArrayList<>();
+
+        int todayYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (Task task : tasks) {
+            int taskYear = task.getTaskDate().get(Calendar.YEAR);
+            if (taskYear == todayYear){
+                taskList.add(task);
+            }
+        }
     }
 
     List<Task> getTasks(String segment, List<String> dayString){
@@ -60,13 +68,6 @@ public class GetTaskList {
             for (Task task : taskList) {
                 int currentTaskDay = task.getTaskDate().get(Calendar.DAY_OF_YEAR);
                 if (currentTaskDay == currentDay + 2){
-                    returnTasks.add(task);
-                }
-            }
-        }else if (segment.equals("Others")){
-            for (Task task : taskList) {
-                int currentTaskDay = task.getTaskDate().get(Calendar.DAY_OF_YEAR);
-                if (currentTaskDay > currentDay + 2){
                     returnTasks.add(task);
                 }
             }
@@ -117,13 +118,6 @@ public class GetTaskList {
             for (Task task : taskList) {
                 int currentTaskDay = task.getTaskDate().get(Calendar.DAY_OF_YEAR);
                 if (currentTaskDay == currentDay + 4){
-                    returnTasks.add(task);
-                }
-            }
-        }else if (segment.equals("Others")){
-            for (Task task : taskList) {
-                int currentTaskDay = task.getTaskDate().get(Calendar.DAY_OF_YEAR);
-                if (currentTaskDay > currentDay + 4){
                     returnTasks.add(task);
                 }
             }
@@ -188,13 +182,6 @@ public class GetTaskList {
             for (Task task : taskList) {
                 int currentTaskDay = task.getTaskDate().get(Calendar.DAY_OF_YEAR);
                 if (currentTaskDay == currentDay + 6){
-                    returnTasks.add(task);
-                }
-            }
-        }else if (segment.equals("Others")){
-            for (Task task : taskList) {
-                int currentTaskDay = task.getTaskDate().get(Calendar.DAY_OF_YEAR);
-                if (currentTaskDay > currentDay + 6){
                     returnTasks.add(task);
                 }
             }

@@ -26,6 +26,7 @@ public class TaskWrapper extends CursorWrapper {
         long taskDate = getLong(getColumnIndex(TASK_DATE));
         int alarmTime = getInt(getColumnIndex(TASK_ALARM_TIME));
         int repeatTask = getInt(getColumnIndex(TASK_REPEAT));
+        int isRepeating = getInt(getColumnIndex(TASK_IS_REPEATING));
 
         Task task = new Task(UUID.fromString(idString));
         task.setTaskTitle(taskTitle);
@@ -33,6 +34,7 @@ public class TaskWrapper extends CursorWrapper {
         task.setDone(taskDone == 0);
         task.setRepeatCategory(repeatTask);
         task.setAlarmTime(alarmTime);
+        task.setAlreadyRepeating(isRepeating == 0);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(taskDate);

@@ -18,6 +18,7 @@ public class Task implements Serializable{
     private int repeatCategory;
     private int alarmTime;
     private boolean isDone;
+    private boolean isAlreadyRepeating;
 
     public Task(){
         taskID = UUID.randomUUID();
@@ -60,7 +61,9 @@ public class Task implements Serializable{
     public String toString(){
         return "Task Title: " + taskTitle + "\n"
                 + "Task Description: " + taskDesc + "\n"
-                + "Task Date: " + formatDate(taskDate);
+                + "Task Date: " + formatDate(taskDate) + "\n"
+                + "Alarm Time: " + getAlarmString(alarmTime) + "\n"
+                + getRepeatString(repeatCategory);
     }
 
     private String formatDate(Calendar calendar){
@@ -91,5 +94,43 @@ public class Task implements Serializable{
 
     public void setAlarmTime(int alarmTime) {
         this.alarmTime = alarmTime;
+    }
+
+
+    public boolean isAlreadyRepeating() {
+        return isAlreadyRepeating;
+    }
+
+    public void setAlreadyRepeating(boolean alreadyRepeating) {
+        isAlreadyRepeating = alreadyRepeating;
+    }
+
+    private String getAlarmString(int category){
+        switch (category){
+            case 1:
+                return "Fifteen Minutes before Task";
+            case 2:
+                return "Thirty Minutes before Task";
+            case 3:
+                return "Forty Five Minutes before Task";
+            case 4:
+                return "One hour before Task";
+            default:
+                return "On Task\'s time";
+        }
+    }
+
+    private String getRepeatString(int category){
+        switch (category){
+            case 1:
+                return "Repeats: Weekly";
+            case 2:
+                return "Repeats: Monthly";
+            case 3:
+                return "Repeats: Yearly";
+            default:
+                return "Task does not Repeat";
+        }
+
     }
 }

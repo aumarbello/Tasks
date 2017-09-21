@@ -5,18 +5,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.EventDay;
 import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.db.TaskDAO;
 import com.example.ahmed.simpdo.data.model.Task;
-import com.squareup.timessquare.CalendarPickerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,9 +30,10 @@ import butterknife.Unbinder;
 public class CalenderFragment extends Fragment {
     private Unbinder unbinder;
     private List<Task> taskList;
+    private static final String TAG = "CalenderFragment";
 
     @BindView(R.id.task_calender)
-    CalendarPickerView calendarView;
+    CalendarView calendarView;
 
     @BindView(R.id.current_task_details)
     TextView currentTask;
@@ -56,25 +56,12 @@ public class CalenderFragment extends Fragment {
 
         unbinder = ButterKnife.bind(this, view);
 
+        int today = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+        showTaskDetails(today);
 
-        DatePicker picker = new DatePicker(getActivity());
-        calendarView.init(new Date(picker.getMinDate()),
-                new Date(picker.getMaxDate()));
-        calendarView.scrollToDate(new Date());
-        calendarView.setOnDateSelectedListener(new CalendarPickerView
-                .OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(Date date) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-
-                showTaskDetails(calendar.get(Calendar.DAY_OF_YEAR));
-            }
-
-            @Override
-            public void onDateUnselected(Date date) {
-
-            }
+        calendarView.setOnDayClickListener(eventDay -> {
+            int day = eventDay.getCalendar().get(Calendar.DAY_OF_YEAR);
+            showTaskDetails(day);
         });
         selectTaskDays();
         return view;
@@ -96,18 +83,19 @@ public class CalenderFragment extends Fragment {
                 taskString.append("\n");
                 taskString.append(getTaskTime(task.getTaskDate()));
                 taskString.append("\n");
+                taskString.append("\n");
             }
         }
         currentTask.setText(taskString.toString());
     }
 
     private void selectTaskDays(){
-        List<Date> dateList = new ArrayList<>();
+        List<EventDay> eventDays = new ArrayList<>();
 
         for (Task task : taskList) {
-            dateList.add(task.getTaskDate().getTime());
+            eventDays.add(new EventDay(task.getTaskDate(), R.drawable.todo));
         }
-        calendarView.highlightDates(dateList);
+        calendarView.setEvents(eventDays);
     }
 
     private String getTaskTime(Calendar calendar){

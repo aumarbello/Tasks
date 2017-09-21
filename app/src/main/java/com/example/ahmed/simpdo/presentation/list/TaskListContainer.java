@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.model.AllTasks;
+import com.example.ahmed.simpdo.data.pref.TaskPref;
 import com.example.ahmed.simpdo.presentation.splash.SplashActivity;
 
 import javax.inject.Inject;
@@ -25,6 +26,9 @@ public class TaskListContainer extends AppCompatActivity
     @Inject
     CalenderFragment calenderFragment;
 
+    @Inject
+    TaskPref pref;
+
     private FragmentManager manager;
 
     @Override
@@ -40,8 +44,12 @@ public class TaskListContainer extends AppCompatActivity
         ((App)getApplication()).getComponent().inject(this);
 
         overridePendingTransition(0, 0);
-        Fragment existingFragment = getSupportFragmentManager()
-                .findFragmentById(R.id.list_container);
+        Fragment existingFragment = manager.findFragmentById(R.id.list_container);
+        if (pref.isCalenderShown()){
+            openCalender();
+            return;
+        }
+
         if (existingFragment == null) {
             Bundle args = new Bundle();
             args.putSerializable(SplashActivity.taskList, allTasks);
@@ -75,7 +83,7 @@ public class TaskListContainer extends AppCompatActivity
 
     public void returnToList() {
         manager.beginTransaction()
-                .replace(R.id.list_container, listFragment)
+                .replace(R.id.list_container, new TaskListFragment())
                 .commit();
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);

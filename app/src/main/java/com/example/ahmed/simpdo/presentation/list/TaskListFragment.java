@@ -1,21 +1,26 @@
 package com.example.ahmed.simpdo.presentation.list;
 
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TimePicker;
 
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
@@ -46,8 +51,7 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
 public class TaskListFragment extends BackgroundFragment implements
         DetailsDialog.DetailsCallBack,
         ViewTaskFragment.CallBack,
-        EditTaskFragment.CallBack{
-
+        EditTaskFragment.CallBack, TimePickerDialog.OnTimeSetListener {
     interface Callback{
         void openCalender();
     }
@@ -229,23 +233,29 @@ public class TaskListFragment extends BackgroundFragment implements
                     todayCalender.get(Calendar.DAY_OF_MONTH));
         }else {
             dateDialog = new DatePickerDialog(getActivity(),
-                    (datePicker, year, month, day) -> {
-                        taskCalender.set(year, month, day);
-                        dateDialog.dismiss();
-                        showTimePicker();
-                    },
+                    null,
                     todayCalender.get(Calendar.YEAR),
                     todayCalender.get(Calendar.MONTH),
                     todayCalender.get(Calendar.DAY_OF_MONTH));
+
+            dateDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                    "Submit", (dialogInterface, i) -> {
+                        int year = dateDialog.getDatePicker().getYear();
+                        int month = dateDialog.getDatePicker().getMonth();
+                        int day = dateDialog.getDatePicker().getDayOfMonth();
+                        taskCalender.set(year, month, day);
+                        dialogInterface.dismiss();
+                        showTimePicker();
+
+            });
         }
         dateDialog.setTitle("Select Task Date");
         dateDialog.show();
     }
 
     private void showTimePicker() {
-        TimePickerDialog timeDialog;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            timeDialog = new TimePickerDialog(getActivity(),
+            TimePickerDialog timeDialog = new TimePickerDialog(getActivity(),
                     android.R.style.Theme_Material_Light_Dialog_Alert,
                     (timePicker, hour, minute) -> {
                         taskCalender.set(Calendar.HOUR_OF_DAY, hour);
@@ -256,20 +266,28 @@ public class TaskListFragment extends BackgroundFragment implements
                     },
                     todayCalender.get(Calendar.HOUR_OF_DAY),
                     todayCalender.get(Calendar.MINUTE), false);
+            timeDialog.setTitle("Select Task Time");
+            timeDialog.show();
         }else {
-            timeDialog = new TimePickerDialog(getActivity(),
-                    (timePicker, hour, minute) -> {
-                        taskCalender.set(Calendar.HOUR_OF_DAY, hour);
-                        taskCalender.set(Calendar.MINUTE, minute);
+            TimePicker picker = new TimePicker(getActivity());
+            picker.setOnTimeChangedListener((timePicker, hour, minute) -> {
+                taskCalender.set(Calendar.HOUR_OF_DAY, hour);
+                taskCalender.set(Calendar.MINUTE, minute);
+            });
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setTitle("Select Task Time")
+                    .setView(picker)
+                    .setPositiveButton("Submit", (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
                         task.setTaskDate(taskCalender);
                         presenter.addTask(task);
                         updateAfterAdding(task);
-                    },
-                    todayCalender.get(Calendar.HOUR_OF_DAY),
-                    todayCalender.get(Calendar.MINUTE), false);
+                    })
+                    .create();
+
+            dialog.show();
         }
-        timeDialog.setTitle("Select Task Time");
-        timeDialog.show();
     }
 
     private void showDetailsDialog(){
@@ -310,6 +328,38 @@ public class TaskListFragment extends BackgroundFragment implements
     public void updateView(Task task) {
         editDialog.dismiss();
         updateAfterEditing(task);
+        if (!task.isAlreadyRepeating() && task.getRepeatCategory() != 0){
+            addRepeatTask(task);
+        }
+    }
+
+    public void updateAfterAdding(Task task){
+        String sectionTag = getTaskSectionTag(task);
+
+        TaskSection currentSection = (TaskSection) adapter.getSection(sectionTag);
+        int posInList = currentSection.addTaskToList(task);
+
+        int items = currentSection.getContentItemsTotal();
+
+        if (currentSection.getState().equals(Section.State.EMPTY)){
+            currentSection.setState(Section.State.LOADED);
+            adapter.notifyDataSetChanged();
+        }else {
+            adapter.notifyItemInsertedInSection(currentSection,
+                    items);
+        }
+
+        if (task.getRepeatCategory() != 0){
+            new RepeatOp().execute(task);
+        }
+    }
+
+    public void updateAfterEditing(Task task){
+        String sectionTag = getTaskSectionTag(task);
+        int taskPositionInSection = adapter.getPositionInSection(position);
+
+        TaskSection currentSection = (TaskSection) adapter.getSection(sectionTag);
+        adapter.notifyItemChangedInSection(currentSection, taskPositionInSection);
     }
 
     @Override
@@ -324,29 +374,12 @@ public class TaskListFragment extends BackgroundFragment implements
         TaskSection currentSection = (TaskSection) adapter.getSection(sectionTag);
         currentSection.removeFromList(task);
 
-        adapter.notifyItemRemovedFromSection(getTaskSectionTag(task),
+        adapter.notifyItemRemovedFromSection(currentSection,
                 taskPositionInSection);
 
         if (currentSection.isSectionEmpty()){
             currentSection.setState(Section.State.EMPTY);
         }
-    }
-
-    public void updateAfterAdding(Task task){
-        String sectionTag = getTaskSectionTag(task);
-
-        TaskSection currentSection = (TaskSection) adapter.getSection(sectionTag);
-        currentSection.addTaskToList(task);
-
-        int items = currentSection.getContentItemsTotal();
-
-        adapter.notifyItemInsertedInSection(getTaskSectionTag(task),
-                items);
-    }
-
-    public void updateAfterEditing(Task task){
-        int taskPositionInSection = adapter.getPositionInSection(position);
-        adapter.notifyItemChangedInSection(getTaskSectionTag(task), taskPositionInSection);
     }
 
     public String getDayString(int day){
@@ -377,8 +410,6 @@ public class TaskListFragment extends BackgroundFragment implements
             }
         }
 
-        dayString.add("Others");
-
         if (preferences.isPreviousTaskShown()){
             dayString.add("Previous");
         }
@@ -389,7 +420,18 @@ public class TaskListFragment extends BackgroundFragment implements
         savedInstance.putSerializable(TAG, allTasks);
     }
 
+    private class RepeatOp extends AsyncTask<Task, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Task... tasks) {
+            Task currentTask = tasks[0];
+            addRepeatTask(currentTask);
+            return null;
+        }
+    }
     private void addRepeatTask(Task task){
+        task.setAlreadyRepeating(true);
+
         Calendar repeatCalender = Calendar.getInstance();
         repeatCalender.setTimeInMillis(dateDialog.getDatePicker().getMaxDate());
 
@@ -405,14 +447,14 @@ public class TaskListFragment extends BackgroundFragment implements
 
                 while (currentYear < maxYear){
                     if (currentYear > todayCalender.get(Calendar.YEAR)){
-                        currentWeek = repeatCalender.getMinimum(Calendar.WEEK_OF_YEAR);
+                        currentWeek = repeatCalender.getMinimum(Calendar.WEEK_OF_YEAR)- 1;
                     }
-
+                    taskCalender.set(Calendar.YEAR, currentYear);
                     while (currentWeek < maxWeek){
                         taskCalender.set(Calendar.WEEK_OF_YEAR, ++currentWeek);
                         task.setTaskDate(taskCalender);
                         presenter.addTask(task);
-                        updateAfterAdding(task);
+//                        updateAfterAdding(task);
                     }
                     currentYear++;
                 }
@@ -423,17 +465,18 @@ public class TaskListFragment extends BackgroundFragment implements
 
                 while (currentYear < maxYear){
                     if (currentYear > todayCalender.get(Calendar.YEAR)){
-                        currentMonth = repeatCalender.getMinimum(Calendar.MONTH);
+                        currentMonth = repeatCalender.getMinimum(Calendar.MONTH) - 1;
                     }
-
+                    taskCalender.set(Calendar.YEAR, currentYear);
                     while (currentMonth < maxMonth){
                         taskCalender.set(Calendar.MONTH,
                                 ++currentMonth);
                         task.setTaskDate(taskCalender);
                         presenter.addTask(task);
-                        updateAfterAdding(task);
+//                        updateAfterAdding(task);
                     }
                     currentYear++;
+                    Log.d(TAG, "Current Year - " + currentYear);
                 }
                 break;
             case 3:
@@ -442,9 +485,14 @@ public class TaskListFragment extends BackgroundFragment implements
                             ++currentYear);
                     task.setTaskDate(taskCalender);
                     presenter.addTask(task);
-                    updateAfterAdding(task);
+//                    updateAfterAdding(task);
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+
     }
 }

@@ -79,6 +79,7 @@ public class TaskDAO {
         values.put(TASK_DONE, task.isDone() ? 0 : 1);
         values.put(TASK_ALARM_TIME, task.getAlarmTime());
         values.put(TASK_REPEAT, task.getRepeatCategory());
+        values.put(TASK_IS_REPEATING, task.isAlreadyRepeating() ? 0 : 1);
         return values;
     }
 

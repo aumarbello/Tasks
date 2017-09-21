@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
@@ -203,6 +205,7 @@ public class EditTaskFragment extends DialogFragment {
         repeatAdapter.setDropDownViewResource
                 (android.R.layout.simple_spinner_dropdown_item);
 
+        repeatSpinner.setAdapter(repeatAdapter);
         repeatSpinner.setSelection(currentTask.getRepeatCategory() + 1);
         repeatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -262,20 +265,27 @@ public class EditTaskFragment extends DialogFragment {
                     currentDate.get(Calendar.DAY_OF_MONTH));
         }else {
             dateDialog = new DatePickerDialog(getActivity(),
-                    (datePicker, year, month, day) ->
-                            newCalender.set(year, month, day),
+                    null,
                     currentDate.get(Calendar.YEAR),
                     currentDate.get(Calendar.MONTH),
                     currentDate.get(Calendar.DAY_OF_MONTH));
+
+            dateDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                    "Submit", (dialogInterface, i) -> {
+                        int year = dateDialog.getDatePicker().getYear();
+                        int month = dateDialog.getDatePicker().getMonth();
+                        int day = dateDialog.getDatePicker().getDayOfMonth();
+                        newCalender.set(year, month, day);
+                        dialogInterface.dismiss();
+                    });
         }
         dateDialog.setTitle("Select New Task Date");
         dateDialog.show();
     }
 
     private void openTimeDialog(){
-        TimePickerDialog timeDialog;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            timeDialog = new TimePickerDialog(getActivity(),
+            TimePickerDialog timeDialog = new TimePickerDialog(getActivity(),
                     android.R.style.Theme_Material_Light_Dialog_Alert,
                     (timePicker, hour, minute) -> {
                         newCalender.set(Calendar.HOUR_OF_DAY, hour);
@@ -284,18 +294,26 @@ public class EditTaskFragment extends DialogFragment {
                     },
                     currentDate.get(Calendar.HOUR_OF_DAY),
                     currentDate.get(Calendar.MINUTE), false);
+            timeDialog.setTitle("Select New Task Time");
+            timeDialog.show();
         }else {
-            timeDialog = new TimePickerDialog(getActivity(),
-                    (timePicker, hour, minute) -> {
-                        newCalender.set(Calendar.HOUR_OF_DAY, hour);
-                        newCalender.set(Calendar.MINUTE, minute);
+            TimePicker picker = new TimePicker(getActivity());
+            picker.setOnTimeChangedListener((timePicker, hour, minute) -> {
+                newCalender.set(Calendar.HOUR_OF_DAY, hour);
+                newCalender.set(Calendar.MINUTE, minute);
+
+            });
+            AlertDialog timeDialog = new AlertDialog.Builder(getActivity())
+                    .setView(picker)
+                    .setPositiveButton("Submit", (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
                         timeView.setText(timeString(newCalender));
-                    },
-                    currentDate.get(Calendar.HOUR_OF_DAY),
-                    currentDate.get(Calendar.MINUTE), false);
+                    })
+                    .setTitle("Select New Task Time")
+                    .create();
+
+            timeDialog.show();
         }
-        timeDialog.setTitle("Select New Task Time");
-        timeDialog.show();
     }
 
     private void saveTask(){

@@ -98,8 +98,8 @@ dependencies {
     //colorPreference
     compile colorPreference
 
-    //others
-    compile 'com.squareup:android-times-square:1.6.5@aar'
+    //calenderView
+    compile 'com.applandeo:material-calendar-view:1.1.0'
 
     //tests
     testCompile jUnit

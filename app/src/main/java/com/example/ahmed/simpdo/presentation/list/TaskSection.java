@@ -78,8 +78,9 @@ class TaskSection extends Section{
         emptyHolder.bindEmptyView(title);
     }
 
-    void addTaskToList(Task task){
+    int addTaskToList(Task task){
         taskList.add(task);
+        return taskList.indexOf(task) + 1;
     }
 
     void removeFromList(Task removedTask){
@@ -98,8 +99,6 @@ class TaskSection extends Section{
         private TextView taskTitle;
         private TextView taskDate;
         private TextView isDone;
-        private TextView alarmTime;
-        private TextView repeatCategory;
         private Task task;
         private int position;
 
@@ -109,8 +108,6 @@ class TaskSection extends Section{
             taskTitle = itemView.findViewById(R.id.task_title);
             taskDate = itemView.findViewById(R.id.task_time);
             isDone = itemView.findViewById(R.id.task_done);
-            alarmTime = itemView.findViewById(R.id.alarm_category);
-            repeatCategory = itemView.findViewById(R.id.repeat_category);
 
             itemView.setOnTouchListener(new SwipeTouchListener(
                     taskListFragment.getActivity(), this));
@@ -134,46 +131,6 @@ class TaskSection extends Section{
 
             if (task.isDone()){
                 itemView.setBackgroundColor(color);
-            }
-
-            switch (task.getAlarmTime()){
-                case 0:
-                    alarmTime.setText(R.string.on_task_time);
-                    break;
-                case 1:
-                    alarmTime.setText(taskListFragment.getString
-                            (R.string.x_before, "15 minutes"));
-                    break;
-                case 2:
-                    alarmTime.setText(taskListFragment.getString
-                            (R.string.x_before, "30 minutes"));
-                    break;
-                case 3:
-                    alarmTime.setText(taskListFragment.getString
-                            (R.string.x_before, "45 minutes"));
-                    break;
-                case 4:
-                    alarmTime.setText(taskListFragment.getString
-                            (R.string.x_before, "1 hour"));
-                    break;
-            }
-
-            switch (task.getRepeatCategory()){
-                case 0:
-                    repeatCategory.setText(R.string.does_not_repeat);
-                    break;
-                case 1:
-                    repeatCategory.setText(taskListFragment.
-                            getString(R.string.repeats_x, "Week"));
-                    break;
-                case 2:
-                    repeatCategory.setText(taskListFragment.
-                            getString(R.string.repeats_x, "Month"));
-                    break;
-                case 3:
-                    repeatCategory.setText(taskListFragment.
-                            getString(R.string.repeats_x, "Year"));
-                    break;
             }
         }
 

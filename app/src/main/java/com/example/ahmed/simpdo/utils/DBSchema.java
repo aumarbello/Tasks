@@ -14,6 +14,7 @@ public final class DBSchema {
     public static final String TASK_DONE = "DONE";
     public static final String TASK_ALARM_TIME = "ALARM_TIME";
     public static final String TASK_REPEAT = "REPEAT_TASK";
+    public static final String TASK_IS_REPEATING = "REPEATING";
 
     public static final String CREATE_TABLE = "create table if not exists " + TASK_TABLE + "(" +
             " _id integer primary key autoincrement, " +
@@ -23,6 +24,7 @@ public final class DBSchema {
             TASK_DONE + " integer, " +
             TASK_DATE + " long, " +
             TASK_ALARM_TIME + " integer, " +
+            TASK_IS_REPEATING + " integer, " +
             TASK_REPEAT + " integer" +
             ")";
 

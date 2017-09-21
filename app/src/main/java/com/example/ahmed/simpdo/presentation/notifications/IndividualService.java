@@ -41,7 +41,7 @@ public class IndividualService extends IntentService {
     @Inject
     TaskPref pref;
     private StringBuilder dueTask;
-    private static final int alarmInterval = 60 * 1000;
+    private static final int alarmInterval = 1000 * 60;
 
     public IndividualService() {
         super(TAG);
@@ -71,10 +71,13 @@ public class IndividualService extends IntentService {
                 showNotification = true;
                 dueTask.append(task.getTaskTitle());
             }
-            dueTask.append("\n");
+            dueTask.append(" ");
 
             if (showNotification){
                 showAlarmNotification();
+                Log.d(TAG, "Task due");
+            }else {
+                Log.d(TAG, "No task due");
             }
         }
     }
