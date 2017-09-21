@@ -52,7 +52,7 @@ class TaskSection extends Section{
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
         TaskViewHolder taskHolder = (TaskViewHolder) holder;
-        taskHolder.bindTask(taskList.get(position), taskHolder.getAdapterPosition());
+        taskHolder.bindTask(taskList.get(position), position);
     }
 
     @Override
@@ -78,9 +78,8 @@ class TaskSection extends Section{
         emptyHolder.bindEmptyView(title);
     }
 
-    int addTaskToList(Task task){
+    void addTaskToList(Task task){
         taskList.add(task);
-        return taskList.indexOf(task) + 1;
     }
 
     void removeFromList(Task removedTask){
@@ -135,17 +134,20 @@ class TaskSection extends Section{
         }
 
         void onClick() {
-            taskListFragment.viewTask(task, position);
+            Task currentTask = taskList.get(position);
+            taskListFragment.viewTask(currentTask, position);
         }
 
         void onDoubleTap(){
-            task.setDone(true);
+            Task currentTask = taskList.get(position);
+            currentTask.setDone(true);
             isDone.setVisibility(View.VISIBLE);
-            taskListFragment.updateTask(task);
+            taskListFragment.updateTask(currentTask);
             itemView.setBackgroundColor(pref.getDoneTaskColor());
         }
 
         void onLongClick() {
+            Task currentTask = taskList.get(position);
             CardView cardView = (CardView)itemView;
             float initialElevation = cardView.getCardElevation();
             cardView.setCardElevation(cardView.getCardElevation() * 15);
@@ -155,10 +157,10 @@ class TaskSection extends Section{
             menu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()){
                     case R.id.edit_task:
-                        taskListFragment.editTask(task, position);
+                        taskListFragment.editTask(currentTask, position);
                         return true;
                     case R.id.delete_task:
-                        taskListFragment.deleteTask(task, position);
+                        taskListFragment.deleteTask(currentTask, position);
                 }
                 return false;
             });

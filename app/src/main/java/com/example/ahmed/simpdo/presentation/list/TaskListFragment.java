@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,7 +50,7 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
 public class TaskListFragment extends BackgroundFragment implements
         DetailsDialog.DetailsCallBack,
         ViewTaskFragment.CallBack,
-        EditTaskFragment.CallBack, TimePickerDialog.OnTimeSetListener {
+        EditTaskFragment.CallBack {
     interface Callback{
         void openCalender();
     }
@@ -78,6 +77,7 @@ public class TaskListFragment extends BackgroundFragment implements
     private AllTasks allTasks;
     private Task task;
     private Callback callback;
+    private List<Task> taskList;
 
     @BindView(R.id.task_list)
     RecyclerView taskListView;
@@ -93,6 +93,7 @@ public class TaskListFragment extends BackgroundFragment implements
         ((App)getActivity().getApplication()).getComponent().inject(this);
         adapter = new SectionedRecyclerViewAdapter();
         task = new Task();
+        taskList = new ArrayList<>();
 
         Bundle args = getArguments();
         allTasks = new AllTasks();
@@ -102,13 +103,13 @@ public class TaskListFragment extends BackgroundFragment implements
                     (SplashActivity.taskList);
             if (allTasks == null){
                 allTasks = new AllTasks();
-                List<Task> taskList = presenter.getAllTasks();
+                taskList = presenter.getAllTasks();
                 allTasks.setTaskList(taskList);
             }
         }else if (savedInstance != null){
             allTasks = (AllTasks) savedInstance.getSerializable(TAG);
         }else{
-            List<Task> taskList = presenter.getAllTasks();
+            taskList = presenter.getAllTasks();
             allTasks.setTaskList(taskList);
         }
 
@@ -337,13 +338,15 @@ public class TaskListFragment extends BackgroundFragment implements
         String sectionTag = getTaskSectionTag(task);
 
         TaskSection currentSection = (TaskSection) adapter.getSection(sectionTag);
-        int posInList = currentSection.addTaskToList(task);
+        currentSection.addTaskToList(task);
+        taskList.add(task);
 
         int items = currentSection.getContentItemsTotal();
-
+        int pos = adapter.getPositionInAdapter(currentSection, 0);
         if (currentSection.getState().equals(Section.State.EMPTY)){
             currentSection.setState(Section.State.LOADED);
-            adapter.notifyDataSetChanged();
+            adapter.notifyItemInsertedInSection(currentSection,
+                    pos);
         }else {
             adapter.notifyItemInsertedInSection(currentSection,
                     items);
@@ -356,10 +359,9 @@ public class TaskListFragment extends BackgroundFragment implements
 
     public void updateAfterEditing(Task task){
         String sectionTag = getTaskSectionTag(task);
-        int taskPositionInSection = adapter.getPositionInSection(position);
 
         TaskSection currentSection = (TaskSection) adapter.getSection(sectionTag);
-        adapter.notifyItemChangedInSection(currentSection, taskPositionInSection);
+        adapter.notifyItemChangedInSection(currentSection, position);
     }
 
     @Override
@@ -368,15 +370,14 @@ public class TaskListFragment extends BackgroundFragment implements
             editDialog.dismiss();
         }
 
-        int taskPositionInSection = adapter.getPositionInSection(position);
         String sectionTag = getTaskSectionTag(task);
+        taskList.remove(task);
 
         TaskSection currentSection = (TaskSection) adapter.getSection(sectionTag);
         currentSection.removeFromList(task);
 
         adapter.notifyItemRemovedFromSection(currentSection,
-                taskPositionInSection);
-
+                position);
         if (currentSection.isSectionEmpty()){
             currentSection.setState(Section.State.EMPTY);
         }
@@ -454,7 +455,6 @@ public class TaskListFragment extends BackgroundFragment implements
                         taskCalender.set(Calendar.WEEK_OF_YEAR, ++currentWeek);
                         task.setTaskDate(taskCalender);
                         presenter.addTask(task);
-//                        updateAfterAdding(task);
                     }
                     currentYear++;
                 }
@@ -473,10 +473,8 @@ public class TaskListFragment extends BackgroundFragment implements
                                 ++currentMonth);
                         task.setTaskDate(taskCalender);
                         presenter.addTask(task);
-//                        updateAfterAdding(task);
                     }
                     currentYear++;
-                    Log.d(TAG, "Current Year - " + currentYear);
                 }
                 break;
             case 3:
@@ -485,14 +483,8 @@ public class TaskListFragment extends BackgroundFragment implements
                             ++currentYear);
                     task.setTaskDate(taskCalender);
                     presenter.addTask(task);
-//                    updateAfterAdding(task);
                 }
                 break;
         }
-    }
-
-    @Override
-    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-
     }
 }
