@@ -18,14 +18,18 @@ class Helper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(
-                CREATE_TABLE
-        );
+        sqLiteDatabase.execSQL(CREATE_NORMAL_TABLE);
+        sqLiteDatabase.execSQL(CREATE_WEEKLY_TABLE);
+        sqLiteDatabase.execSQL(CREATE_MONTHLY_TABLE);
+        sqLiteDatabase.execSQL(CREATE_YEARLY_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL(DROP_TABLE);
+        sqLiteDatabase.execSQL(DROP_NORMAL_TABLE);
+        sqLiteDatabase.execSQL(DROP_WEEKLY_TABLE);
+        sqLiteDatabase.execSQL(DROP_MONTHLY_TABLE);
+        sqLiteDatabase.execSQL(DROP_YEARLY_TABLE);
         onCreate(sqLiteDatabase);
     }
 }

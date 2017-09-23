@@ -135,7 +135,7 @@ public class IndividualService extends IntentService {
     private List<Task> getDaysTask(){
         TaskDAO dao = new TaskDAO(this);
         dao.open();
-        List<Task> allTasks = dao.getAllTasks();
+        List<Task> allTasks = dao.getAllNormalTasks();
         dao.close();
 
         List<Task> dayTask = new ArrayList<>();

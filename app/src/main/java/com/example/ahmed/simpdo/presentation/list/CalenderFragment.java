@@ -53,7 +53,7 @@ public class CalenderFragment extends Fragment {
         }else {
             TaskDAO dao = new TaskDAO(getActivity());
             dao.open();
-            taskList = dao.getAllTasks();
+            taskList = dao.getAllNormalTasks();
             dao.close();
             Log.d(TAG, "Reading taskList from database directly");
         }

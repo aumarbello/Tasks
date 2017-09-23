@@ -33,7 +33,7 @@ public class SplashPresenter {
     }
     void startTaskList(){
         allTasks = new AllTasks();
-        List<Task> taskList = taskDAO.getAllTasks();
+        List<Task> taskList = taskDAO.getAllNormalTasks();
         allTasks.setTaskList(taskList);
         Observable.create(emitter -> {
             SystemClock.sleep(Splash_Time_Out);

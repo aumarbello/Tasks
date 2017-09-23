@@ -20,19 +20,19 @@ public class TaskListPresenter{
     }
 
     List<Task> getAllTasks(){
-        return taskDAO.getAllTasks();
+        return taskDAO.getAllNormalTasks();
     }
 
     void deleteTask(Task task) {
-        taskDAO.deleteTask(task);
+        taskDAO.deleteNormalTask(task);
     }
 
     void addTask(Task task){
-        taskDAO.addTask(task);
+        taskDAO.addNormalTask(task);
     }
 
 
     void updateTask(Task task) {
-        taskDAO.updateTask(task);
+        taskDAO.updateNormalTask(task);
     }
 }

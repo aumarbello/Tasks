@@ -18,10 +18,10 @@ public class EditTaskPresenter {
     }
 
     void editTask(Task task){
-        taskDAO.updateTask(task);
+        taskDAO.updateNormalTask(task);
     }
 
     void deleteTask(Task task){
-        taskDAO.deleteTask(task);
+        taskDAO.deleteNormalTask(task);
     }
 }

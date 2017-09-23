@@ -28,29 +28,92 @@ public class TaskDAO {
         database = dbHelper.getWritableDatabase();
     }
 
-    public void addTask(Task task){
-        database.insert(TASK_TABLE, null, getValues(task));
+    public void addNormalTask(Task task){
+        database.insert(NORMAL_TASKS_TABLE, null, getValues(task));
     }
 
-    public void updateTask(Task task){
+    public void addWeeklyTask(Task task){
+        database.insert(WEEKLY_TASKS_TABLE, null, getValues(task));
+    }
+
+    public void addMonthlyTask(Task task){
+        database.insert(MONTHLY_TASKS_TABLE, null, getValues(task));
+    }
+
+    public void addYearlyTask(Task task){
+        database.insert(YEARLY_TASKS_TABLE, null, getValues(task));
+    }
+
+    public void updateNormalTask(Task task){
         database.update(
-                TASK_TABLE,
+                NORMAL_TASKS_TABLE,
                 getValues(task),
                 TASK_ID +  " = ?",
                 new String[]{task.getTaskID().toString()}
         );
     }
 
-    public void deleteTask(Task task){
+    public void updateWeeklyTask(Task task){
+        database.update(
+                WEEKLY_TASKS_TABLE,
+                getValues(task),
+                TASK_ID +  " = ?",
+                new String[]{task.getTaskID().toString()}
+        );
+    }
+
+    public void updateMonthlyTask(Task task){
+        database.update(
+                MONTHLY_TASKS_TABLE,
+                getValues(task),
+                TASK_ID +  " = ?",
+                new String[]{task.getTaskID().toString()}
+        );
+    }
+
+    public void updateYearlyTask(Task task){
+        database.update(
+                YEARLY_TASKS_TABLE,
+                getValues(task),
+                TASK_ID +  " = ?",
+                new String[]{task.getTaskID().toString()}
+        );
+    }
+
+    public void deleteNormalTask(Task task){
         database.delete(
-                TASK_TABLE,
+                NORMAL_TASKS_TABLE,
                 TASK_ID + " = ?",
                 new String[]{task.getTaskID().toString()}
         );
     }
 
-    public List<Task> getAllTasks(){
-        TaskWrapper wrapper = query(null, null);
+    public void deleteWeeklyTask(Task task){
+        database.delete(
+                WEEKLY_TASKS_TABLE,
+                TASK_ID + " = ?",
+                new String[]{task.getTaskID().toString()}
+        );
+    }
+
+    public void deleteMonthlyTask(Task task){
+        database.delete(
+                MONTHLY_TASKS_TABLE,
+                TASK_ID + " = ?",
+                new String[]{task.getTaskID().toString()}
+        );
+    }
+
+    public void deleteYearlyTask(Task task){
+        database.delete(
+                YEARLY_TASKS_TABLE,
+                TASK_ID + " = ?",
+                new String[]{task.getTaskID().toString()}
+        );
+    }
+
+    public List<Task> getAllNormalTasks(){
+        TaskWrapper wrapper = query(null, null, NORMAL_TASKS_TABLE);
         List<Task> taskList = new ArrayList<>();
         wrapper.moveToFirst();
         while (!wrapper.isAfterLast()){
@@ -61,9 +124,45 @@ public class TaskDAO {
         return taskList;
     }
 
-    private TaskWrapper query(String whereClause, String[] args){
+    public List<Task> getAllWeeklyTasks(){
+        TaskWrapper wrapper = query(null, null, WEEKLY_TASKS_TABLE);
+        List<Task> taskList = new ArrayList<>();
+        wrapper.moveToFirst();
+        while (!wrapper.isAfterLast()){
+            Task task = wrapper.getTask();
+            taskList.add(task);
+            wrapper.moveToNext();
+        }
+        return taskList;
+    }
+
+    public List<Task> getAllMonthlyTasks(){
+        TaskWrapper wrapper = query(null, null, MONTHLY_TASKS_TABLE);
+        List<Task> taskList = new ArrayList<>();
+        wrapper.moveToFirst();
+        while (!wrapper.isAfterLast()){
+            Task task = wrapper.getTask();
+            taskList.add(task);
+            wrapper.moveToNext();
+        }
+        return taskList;
+    }
+
+    public List<Task> getAllYearlyTasks(){
+        TaskWrapper wrapper = query(null, null, YEARLY_TASKS_TABLE);
+        List<Task> taskList = new ArrayList<>();
+        wrapper.moveToFirst();
+        while (!wrapper.isAfterLast()){
+            Task task = wrapper.getTask();
+            taskList.add(task);
+            wrapper.moveToNext();
+        }
+        return taskList;
+    }
+
+    private TaskWrapper query(String whereClause, String[] args, String table){
         return new TaskWrapper(database.query(
-                        TASK_TABLE,
+                        table,
                         null,
                         whereClause,
                         args, null, null, null
