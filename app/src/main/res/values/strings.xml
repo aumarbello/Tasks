@@ -47,7 +47,4 @@
     <string name="empty_list">No Tasks Today</string>
     <string name="no_tasks">No tasks on %s</string>
     <string name="open_calender">Open Calender</string>
-    <string name="key_show_calender">key_show_calender_first</string>
-    <string name="show_calender_title">Show Calender View First</string>
-    <string name="show_calender_summarY">If off tasklist will be the default start up screen</string>
 </resources>

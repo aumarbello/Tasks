@@ -44,8 +44,4 @@ public class TaskPref {
         return sharedPreferences.getInt(resources.getString
                 (R.string.done_select_color_key), Color.LTGRAY);
     }
-
-    public boolean isCalenderShown(){
-        return sharedPreferences.getBoolean(resources.getString(R.string.key_show_calender), false);
-    }
 }

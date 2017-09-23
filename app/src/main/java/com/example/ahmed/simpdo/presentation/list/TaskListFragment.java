@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -101,11 +102,6 @@ public class TaskListFragment extends BackgroundFragment implements
         if (args != null){
             allTasks = (AllTasks) getArguments().getSerializable
                     (SplashActivity.taskList);
-            if (allTasks == null){
-                allTasks = new AllTasks();
-                taskList = presenter.getAllTasks();
-                allTasks.setTaskList(taskList);
-            }
         }else if (savedInstance != null){
             allTasks = (AllTasks) savedInstance.getSerializable(TAG);
         }else{
@@ -340,13 +336,16 @@ public class TaskListFragment extends BackgroundFragment implements
         TaskSection currentSection = (TaskSection) adapter.getSection(sectionTag);
         currentSection.addTaskToList(task);
         taskList.add(task);
+        allTasks.setTaskList(taskList);
 
+        Log.d(TAG, "Current Section is - " + currentSection.getSectionTitle());
         int items = currentSection.getContentItemsTotal();
         int pos = adapter.getPositionInAdapter(currentSection, 0);
+        int post = adapter.getItemCount();
         if (currentSection.getState().equals(Section.State.EMPTY)){
             currentSection.setState(Section.State.LOADED);
             adapter.notifyItemInsertedInSection(currentSection,
-                    pos);
+                    post);
         }else {
             adapter.notifyItemInsertedInSection(currentSection,
                     items);
@@ -455,8 +454,10 @@ public class TaskListFragment extends BackgroundFragment implements
                         taskCalender.set(Calendar.WEEK_OF_YEAR, ++currentWeek);
                         task.setTaskDate(taskCalender);
                         presenter.addTask(task);
+                        Log.d(TAG, "Adding for week - " + currentWeek);
                     }
                     currentYear++;
+                    Log.d(TAG, "Adding for year - " + currentYear);
                 }
                 break;
             case 2:

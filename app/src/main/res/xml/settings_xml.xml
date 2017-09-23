@@ -17,13 +17,6 @@
             android:dialogTitle="@string/number_of_days_dialog_title"
             android:title="@string/number_of_days_title"
             />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="@string/key_show_calender"
-            android:title="@string/show_calender_title"
-            android:summary="@string/show_calender_summarY"
-            />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Color">

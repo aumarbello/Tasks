@@ -29,19 +29,26 @@ public class TaskListContainer extends AppCompatActivity
     @Inject
     TaskPref pref;
 
+    @Inject
+    TaskListPresenter presenter;
+
     private FragmentManager manager;
+    private AllTasks allTasks;
 
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         setContentView(R.layout.container);
+        ((App)getApplication()).getComponent().inject(this);
 
         manager = getSupportFragmentManager();
 
-        AllTasks allTasks = (AllTasks) getIntent().getSerializableExtra
+        allTasks = (AllTasks) getIntent().getSerializableExtra
                 (SplashActivity.taskList);
-
-        ((App)getApplication()).getComponent().inject(this);
+        if (allTasks == null){
+            allTasks = new AllTasks();
+            allTasks.setTaskList(presenter.getAllTasks());
+        }
 
         overridePendingTransition(0, 0);
         Fragment existingFragment = manager.findFragmentById(R.id.list_container);
@@ -58,7 +65,6 @@ public class TaskListContainer extends AppCompatActivity
             args.putSerializable(SplashActivity.taskList, allTasks);
             listFragment.setArguments(args);
 
-            int count = manager.getBackStackEntryCount();
             manager.beginTransaction()
                     .add(R.id.list_container, listFragment)
                     .commit();
@@ -67,6 +73,9 @@ public class TaskListContainer extends AppCompatActivity
 
     @Override
     public void openCalender() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(SplashActivity.taskList, allTasks);
+        calenderFragment.setArguments(bundle);
         manager.beginTransaction()
                 .replace(R.id.list_container, calenderFragment)
                 .commit();
@@ -85,8 +94,12 @@ public class TaskListContainer extends AppCompatActivity
     }
 
     public void returnToList() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(SplashActivity.taskList, allTasks);
+        TaskListFragment fragment = new TaskListFragment();
+        fragment.setArguments(bundle);
         manager.beginTransaction()
-                .replace(R.id.list_container, new TaskListFragment())
+                .replace(R.id.list_container, fragment)
                 .commit();
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
