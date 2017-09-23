@@ -52,13 +52,6 @@ public class TaskListContainer extends AppCompatActivity
 
         overridePendingTransition(0, 0);
         Fragment existingFragment = manager.findFragmentById(R.id.list_container);
-        if (pref.isCalenderShown() && allTasks == null){
-            returnToList();
-            return;
-        }else if (pref.isCalenderShown()){
-            openCalender();
-            return;
-        }
 
         if (existingFragment == null) {
             Bundle args = new Bundle();
