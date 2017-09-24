@@ -23,14 +23,41 @@ public class TaskListPresenter{
         return taskDAO.getAllNormalTasks();
     }
 
-    void deleteTask(Task task) {
+    void deleteTask(Task task, boolean deleteAll) {
         taskDAO.deleteNormalTask(task);
+
+        if (deleteAll){
+            switch (task.getRepeatCategory()){
+                case 1:
+                    taskDAO.deleteWeeklyTask(task);
+                    break;
+                case 2:
+                    taskDAO.deleteMonthlyTask(task);
+                    break;
+                case 3:
+                    taskDAO.deleteYearlyTask(task);
+                    break;
+            }
+        }
     }
 
-    void addTask(Task task){
+    void addTask(Task task, boolean isRepeating){
         taskDAO.addNormalTask(task);
-    }
 
+        if (isRepeating){
+            switch (task.getRepeatCategory()){
+                case 1:
+                    taskDAO.addWeeklyTask(task);
+                    break;
+                case 2:
+                    taskDAO.addMonthlyTask(task);
+                    break;
+                case 3:
+                    taskDAO.addYearlyTask(task);
+                    break;
+            }
+        }
+    }
 
     void updateTask(Task task) {
         taskDAO.updateNormalTask(task);

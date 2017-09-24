@@ -21,7 +21,21 @@ public class EditTaskPresenter {
         taskDAO.updateNormalTask(task);
     }
 
-    void deleteTask(Task task){
+    void deleteTask(Task task, boolean deleteAll){
         taskDAO.deleteNormalTask(task);
+
+        if (deleteAll){
+            switch (task.getRepeatCategory()){
+                case 1:
+                    taskDAO.deleteWeeklyTask(task);
+                    break;
+                case 2:
+                    taskDAO.deleteMonthlyTask(task);
+                    break;
+                case 3:
+                    taskDAO.deleteYearlyTask(task);
+                    break;
+            }
+        }
     }
 }

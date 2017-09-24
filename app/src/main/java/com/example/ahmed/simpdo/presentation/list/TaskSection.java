@@ -1,7 +1,5 @@
 package com.example.ahmed.simpdo.presentation.list;
 
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -9,10 +7,7 @@ import android.widget.TextView;
 import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.model.Task;
 import com.example.ahmed.simpdo.data.pref.TaskPref;
-
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
@@ -46,7 +41,8 @@ class TaskSection extends Section{
 
     @Override
     public RecyclerView.ViewHolder getItemViewHolder(View view) {
-        return new TaskViewHolder(view);
+        return new TaskViewHolder(view, taskListFragment,
+                taskListFragment.getActivity(), taskList, pref);
     }
 
     @Override
@@ -92,83 +88,6 @@ class TaskSection extends Section{
 
     boolean isSectionEmpty(){
         return taskList.isEmpty();
-    }
-
-    class TaskViewHolder extends RecyclerView.ViewHolder{
-        private TextView taskTitle;
-        private TextView taskDate;
-        private TextView isDone;
-        private Task task;
-        private int position;
-
-        TaskViewHolder(View itemView) {
-            super(itemView);
-
-            taskTitle = itemView.findViewById(R.id.task_title);
-            taskDate = itemView.findViewById(R.id.task_time);
-            isDone = itemView.findViewById(R.id.task_done);
-
-            itemView.setOnTouchListener(new SwipeTouchListener(
-                    taskListFragment.getActivity(), this));
-        }
-
-        void bindTask(Task task, int position){
-            this.task = task;
-            this.position = position;
-
-            taskTitle.setText(task.getTaskTitle());
-
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
-
-            String time = sdf.format(task.getTaskDate().getTime());
-
-            taskDate.setText(time);
-
-            isDone.setVisibility(task.isDone() ? View.VISIBLE: View.GONE);
-
-            int color = pref.getDoneTaskColor();
-
-            if (task.isDone()){
-                itemView.setBackgroundColor(color);
-            }
-        }
-
-        void onClick() {
-            Task currentTask = taskList.get(position);
-            taskListFragment.viewTask(currentTask, position);
-        }
-
-        void onDoubleTap(){
-            Task currentTask = taskList.get(position);
-            currentTask.setDone(true);
-            isDone.setVisibility(View.VISIBLE);
-            taskListFragment.updateTask(currentTask);
-            itemView.setBackgroundColor(pref.getDoneTaskColor());
-        }
-
-        void onLongClick() {
-            Task currentTask = taskList.get(position);
-            CardView cardView = (CardView)itemView;
-            float initialElevation = cardView.getCardElevation();
-            cardView.setCardElevation(cardView.getCardElevation() * 15);
-            PopupMenu menu = new PopupMenu(taskListFragment.getActivity(),
-                    itemView);
-            menu.inflate(R.menu.pop_up_menu);
-            menu.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()){
-                    case R.id.edit_task:
-                        taskListFragment.editTask(currentTask, position);
-                        return true;
-                    case R.id.delete_task:
-                        taskListFragment.deleteTask(currentTask, position);
-                }
-                return false;
-            });
-
-            menu.setOnDismissListener(popupMenu ->
-                    cardView.setCardElevation(initialElevation));
-            menu.show();
-        }
     }
 
     private class TaskSectionHolder extends RecyclerView.ViewHolder{

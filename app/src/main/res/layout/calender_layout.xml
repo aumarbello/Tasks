@@ -8,20 +8,12 @@
     <com.applandeo.materialcalendarview.CalendarView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_weight="0.6"
         android:id="@+id/task_calender"
         />
-    <ScrollView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/current_task_details"
-            android:text="@string/task_description"
-            android:textColor="@android:color/black"
-            android:layout_margin="10dp"
-            android:textSize="18sp"/>
-    </ScrollView>
+        android:layout_weight="0.4"
+        android:id="@+id/current_task_details"/>
 </LinearLayout>

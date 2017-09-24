@@ -142,14 +142,36 @@ public class EditTaskFragment extends DialogFragment {
          return dialog.setView(view)
                 .setTitle("Edit Task")
                 .setPositiveButton("Delete", (dialogInterface, i) -> {
-                    presenter.deleteTask(currentTask);
-                    callBack.updateAfterDelete(currentTask);
+                    if (currentTask.getRepeatCategory() == 0){
+                        presenter.deleteTask(currentTask, false);
+                        callBack.updateAfterDelete(currentTask);
+                    }else {
+                        showDeleteAllDialog();
+                    }
                 })
                 .setNegativeButton("Save", ((dialogInterface, i) -> {
                     saveTask();
                     callBack.updateView(currentTask);
                 }))
                 .create();
+    }
+
+    private void showDeleteAllDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle("Delete All")
+                .setMessage("Delete All Occurrence of this Task?")
+                .setPositiveButton("No", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    presenter.deleteTask(currentTask, false);
+                    callBack.updateAfterDelete(currentTask);
+                })
+                .setNegativeButton("Yes", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    presenter.deleteTask(currentTask, true);
+                    callBack.updateAfterDelete(currentTask);
+                })
+                .create();
+        dialog.show();
     }
 
     private void setUpAlarmTimeSpinner() {

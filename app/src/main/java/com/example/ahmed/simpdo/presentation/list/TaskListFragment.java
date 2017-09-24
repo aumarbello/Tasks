@@ -51,7 +51,7 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
 public class TaskListFragment extends BackgroundFragment implements
         DetailsDialog.DetailsCallBack,
         ViewTaskFragment.CallBack,
-        EditTaskFragment.CallBack {
+        EditTaskFragment.CallBack, ItemActions{
     interface Callback{
         void openCalender();
     }
@@ -183,6 +183,7 @@ public class TaskListFragment extends BackgroundFragment implements
         }
     }
 
+    @Override
     public void viewTask(Task task, int position) {
         this.position = position;
         viewDialog = ViewTaskFragment.getInstance(task, position);
@@ -208,10 +209,33 @@ public class TaskListFragment extends BackgroundFragment implements
         editDialog.show(getFragmentManager(), "Edit Task");
     }
 
+    @Override
     public void deleteTask(Task task, int position){
         this.position = position;
-        presenter.deleteTask(task);
-        updateAfterDelete(task);
+        if (task.getRepeatCategory() == 0){
+            presenter.deleteTask(task, false);
+            updateAfterDelete(task);
+        }else {
+            showDeleteAllDialog(task);
+        }
+    }
+
+    private void showDeleteAllDialog(Task task) {
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle("Delete All")
+                .setMessage("Delete All Occurrence of this Task?")
+                .setPositiveButton("No", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    presenter.deleteTask(task, false);
+                    updateAfterDelete(task);
+                })
+                .setNegativeButton("Yes", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    presenter.deleteTask(task, true);
+                    updateAfterDelete(task);
+                })
+                .create();
+        dialog.show();
     }
 
 
@@ -258,8 +282,12 @@ public class TaskListFragment extends BackgroundFragment implements
                         taskCalender.set(Calendar.HOUR_OF_DAY, hour);
                         taskCalender.set(Calendar.MINUTE, minute);
                         task.setTaskDate(taskCalender);
-                        presenter.addTask(task);
+                        presenter.addTask(task, false);
                         updateAfterAdding(task);
+
+                        if (task.getRepeatCategory() != 0){
+                            new RepeatOp().execute(task);
+                        }
                     },
                     todayCalender.get(Calendar.HOUR_OF_DAY),
                     todayCalender.get(Calendar.MINUTE), false);
@@ -278,8 +306,12 @@ public class TaskListFragment extends BackgroundFragment implements
                     .setPositiveButton("Submit", (dialogInterface, i) -> {
                         dialogInterface.dismiss();
                         task.setTaskDate(taskCalender);
-                        presenter.addTask(task);
+                        presenter.addTask(task, false);
                         updateAfterAdding(task);
+
+                        if (task.getRepeatCategory() != 0){
+                            new RepeatOp().execute(task);
+                        }
                     })
                     .create();
 
@@ -349,10 +381,6 @@ public class TaskListFragment extends BackgroundFragment implements
         }else {
             adapter.notifyItemInsertedInSection(currentSection,
                     items);
-        }
-
-        if (task.getRepeatCategory() != 0){
-            new RepeatOp().execute(task);
         }
     }
 
@@ -453,7 +481,7 @@ public class TaskListFragment extends BackgroundFragment implements
                     while (currentWeek < maxWeek){
                         taskCalender.set(Calendar.WEEK_OF_YEAR, ++currentWeek);
                         task.setTaskDate(taskCalender);
-                        presenter.addTask(task);
+                        presenter.addTask(task, true);
                         Log.d(TAG, "Adding for week - " + currentWeek);
                     }
                     currentYear++;
@@ -473,7 +501,7 @@ public class TaskListFragment extends BackgroundFragment implements
                         taskCalender.set(Calendar.MONTH,
                                 ++currentMonth);
                         task.setTaskDate(taskCalender);
-                        presenter.addTask(task);
+                        presenter.addTask(task, true);
                     }
                     currentYear++;
                 }
@@ -483,7 +511,7 @@ public class TaskListFragment extends BackgroundFragment implements
                     taskCalender.set(Calendar.YEAR,
                             ++currentYear);
                     task.setTaskDate(taskCalender);
-                    presenter.addTask(task);
+                    presenter.addTask(task, true);
                 }
                 break;
         }

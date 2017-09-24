@@ -11,9 +11,9 @@ import android.view.View;
 
 class SwipeTouchListener implements View.OnTouchListener {
     private final GestureDetector detector;
-    private TaskSection.TaskViewHolder holder;
+    private TaskViewHolder holder;
 
-    SwipeTouchListener(Context context, TaskSection.TaskViewHolder holder){
+    SwipeTouchListener(Context context, TaskViewHolder holder){
         detector = new GestureDetector(context, new ListeningGesture());
         this.holder = holder;
     }
