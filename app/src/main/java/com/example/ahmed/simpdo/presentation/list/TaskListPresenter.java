@@ -1,5 +1,7 @@
 package com.example.ahmed.simpdo.presentation.list;
 
+import android.util.Log;
+
 import com.example.ahmed.simpdo.data.db.TaskDAO;
 import com.example.ahmed.simpdo.data.model.Task;
 
@@ -42,20 +44,24 @@ public class TaskListPresenter{
     }
 
     void addTask(Task task, boolean isRepeating){
-        taskDAO.addNormalTask(task);
-
         if (isRepeating){
             switch (task.getRepeatCategory()){
                 case 1:
+                    Log.d("Presenter", "Adding weekly task");
                     taskDAO.addWeeklyTask(task);
                     break;
                 case 2:
+                    Log.d("Presenter", "Adding monthly task");
                     taskDAO.addMonthlyTask(task);
                     break;
                 case 3:
+                    Log.d("Presenter", "Adding yearly task");
                     taskDAO.addYearlyTask(task);
                     break;
             }
+        }else {
+            Log.d("Presenter", "Adding normal task");
+            taskDAO.addNormalTask(task);
         }
     }
 

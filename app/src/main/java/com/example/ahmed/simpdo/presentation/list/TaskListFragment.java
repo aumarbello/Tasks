@@ -102,11 +102,14 @@ public class TaskListFragment extends BackgroundFragment implements
         if (args != null){
             allTasks = (AllTasks) getArguments().getSerializable
                     (SplashActivity.taskList);
+            Log.d(TAG, "Reading from arguments");
         }else if (savedInstance != null){
             allTasks = (AllTasks) savedInstance.getSerializable(TAG);
+            Log.d(TAG, "Reading from saved instance");
         }else{
             taskList = presenter.getAllTasks();
             allTasks.setTaskList(taskList);
+            Log.d(TAG, "Reading from database");
         }
 
 
@@ -472,7 +475,7 @@ public class TaskListFragment extends BackgroundFragment implements
             case 1:
                 int currentWeek = taskCalender.get(Calendar.WEEK_OF_YEAR);
                 int maxWeek = repeatCalender.getMaximum(Calendar.WEEK_OF_YEAR);
-
+                Log.d(TAG, "Adding weekly repeat task");
                 while (currentYear < maxYear){
                     if (currentYear > todayCalender.get(Calendar.YEAR)){
                         currentWeek = repeatCalender.getMinimum(Calendar.WEEK_OF_YEAR)- 1;
@@ -491,7 +494,7 @@ public class TaskListFragment extends BackgroundFragment implements
             case 2:
                 int currentMonth = taskCalender.get(Calendar.MONTH);
                 int maxMonth = repeatCalender.getMaximum(Calendar.MONTH);
-
+                Log.d(TAG, "Adding monthly repeat task");
                 while (currentYear < maxYear){
                     if (currentYear > todayCalender.get(Calendar.YEAR)){
                         currentMonth = repeatCalender.getMinimum(Calendar.MONTH) - 1;
@@ -508,6 +511,7 @@ public class TaskListFragment extends BackgroundFragment implements
                 break;
             case 3:
                 while (currentYear < maxYear){
+                    Log.d(TAG, "Adding yearly repeat task");
                     taskCalender.set(Calendar.YEAR,
                             ++currentYear);
                     task.setTaskDate(taskCalender);

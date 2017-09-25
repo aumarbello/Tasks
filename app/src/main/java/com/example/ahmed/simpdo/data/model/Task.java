@@ -133,4 +133,12 @@ public class Task implements Serializable{
         }
 
     }
+
+    @Override
+    public boolean equals(Object object){
+        if ((object == null) || (object.getClass() != Task.class))
+            return false;
+        Task task = (Task) object;
+        return this.getTaskID().equals(task.getTaskID());
+    }
 }

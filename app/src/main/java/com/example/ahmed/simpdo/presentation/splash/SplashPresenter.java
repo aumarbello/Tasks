@@ -1,6 +1,7 @@
 package com.example.ahmed.simpdo.presentation.splash;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.example.ahmed.simpdo.data.db.TaskDAO;
 import com.example.ahmed.simpdo.data.model.AllTasks;
@@ -51,7 +52,7 @@ public class SplashPresenter {
         List<Task> yearlyTasks = taskDAO.getAllYearlyTasks();
 
         List<Task> returnList = new ArrayList<>(normalTasks);
-
+        Log.d("Splash", "Initial Size with normal list - "+ returnList.size());
         for (Task task : weeklyTasks) {
             if (!normalTasks.contains(task)){
                 //todo override equals method of tasks
@@ -59,7 +60,7 @@ public class SplashPresenter {
                 taskDAO.addNormalTask(task);
             }
         }
-
+        Log.d("Splash", "After weekly - "+ returnList.size());
         for (Task task : monthlyTasks) {
             if (!normalTasks.contains(task)){
                 //todo override equals method of tasks
@@ -67,7 +68,7 @@ public class SplashPresenter {
                 taskDAO.addNormalTask(task);
             }
         }
-
+        Log.d("Splash", "After monthly - "+ returnList.size());
         for (Task task : yearlyTasks) {
             if (!normalTasks.contains(task)){
                 //todo override equals method of tasks
@@ -75,7 +76,7 @@ public class SplashPresenter {
                 taskDAO.addNormalTask(task);
             }
         }
-
+        Log.d("Splash", "After yearly - "+ returnList.size());
         return returnList;
     }
 }

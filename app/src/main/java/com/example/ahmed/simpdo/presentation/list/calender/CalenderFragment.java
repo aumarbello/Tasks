@@ -1,6 +1,7 @@
 package com.example.ahmed.simpdo.presentation.list.calender;
 
 import android.app.AlertDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,6 +52,8 @@ public class CalenderFragment extends Fragment
     private CalenderAdapter adapter;
     private EditTaskFragment editTaskFragment;
     private int position;
+    private List<EventDay> eventDays;
+    private long timeInMillSecs;
 
     @Inject
     TaskPref pref;
@@ -79,7 +82,8 @@ public class CalenderFragment extends Fragment
             dao.close();
             Log.d(TAG, "Reading taskList from database directly");
         }
-
+        DatePicker picker = new DatePicker(getActivity());
+        timeInMillSecs = picker.getMaxDate();
     }
 
     @Override
@@ -100,6 +104,8 @@ public class CalenderFragment extends Fragment
             update(showTaskDetails(day));
         });
         selectTaskDays();
+
+        new OtherEvents().execute();
         return view;
     }
 
@@ -132,8 +138,7 @@ public class CalenderFragment extends Fragment
     }
 
     private void selectTaskDays(){
-        List<EventDay> eventDays = new ArrayList<>();
-
+        eventDays = new ArrayList<>();
         for (Task task : taskList) {
             Calendar taskCalender = task.getTaskDate();
             DatePicker picker = new DatePicker(getActivity());
@@ -146,6 +151,7 @@ public class CalenderFragment extends Fragment
 
             eventDays.add(new EventDay(task.getTaskDate(), R.drawable.todo));
         }
+        Log.d(TAG, "Setting event day's - for - " + eventDays.size());
         calendarView.setEvents(eventDays);
     }
 
@@ -208,7 +214,9 @@ public class CalenderFragment extends Fragment
 
     @Override
     public void updateView(Task task) {
-        editTaskFragment.dismiss();
+        if (editTaskFragment != null){
+            editTaskFragment.dismiss();
+        }
         adapter.notifyItemChanged(position);
     }
 
@@ -229,7 +237,7 @@ public class CalenderFragment extends Fragment
         public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(CalenderFragment.this.getActivity());
 
-            View view = inflater.inflate(R.layout.task_list_item, parent);
+            View view = inflater.inflate(R.layout.task_list_item, parent, false);
             return new TaskViewHolder(view, CalenderFragment.this,
                     CalenderFragment.this.getActivity(), tasks, pref
             );
@@ -251,6 +259,33 @@ public class CalenderFragment extends Fragment
 
         private void removeTask(Task task){
             tasks.remove(task);
+        }
+    }
+
+    private class OtherEvents extends AsyncTask<Void, Void, List<EventDay>>{
+        @Override
+        protected List<EventDay> doInBackground(Void... voids) {
+            List<Task> taskList = new ArrayList<>(presenter.getWeeklyTasks());
+            taskList.addAll(presenter.getMonthlyTasks());
+            taskList.addAll(presenter.getYearlyTasks());
+            for (Task task : taskList) {
+                Calendar taskCalender = task.getTaskDate();
+                Calendar repeatCalender = Calendar.getInstance();
+                repeatCalender.setTimeInMillis(timeInMillSecs);
+                Calendar todayCalender = Calendar.getInstance();
+
+                int currentYear = taskCalender.get(Calendar.YEAR);
+                int maxYear =  repeatCalender.get(Calendar.YEAR);
+
+                eventDays.add(new EventDay(task.getTaskDate(), R.drawable.todo));
+            }
+            return eventDays;
+        }
+        @Override
+        protected void onPostExecute(List<EventDay> eventDays){
+            List<EventDay> eventDayList = new ArrayList<>();
+            calendarView.setEvents(eventDayList);
+            calendarView.setEvents(eventDays);
         }
     }
 }
