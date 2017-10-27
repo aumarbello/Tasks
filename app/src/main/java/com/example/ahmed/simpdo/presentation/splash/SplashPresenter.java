@@ -62,6 +62,5 @@ public class SplashPresenter {
             returnList.add(task);
             taskDAO.addNormalTask(task);
         });
-        return returnList;
     }
 }

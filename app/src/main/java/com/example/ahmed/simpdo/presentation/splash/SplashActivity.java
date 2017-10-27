@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.db.TaskDAO;
-import com.example.ahmed.simpdo.data.model.AllTasks;
 import com.example.ahmed.simpdo.presentation.list.TaskListContainer;
 
 import javax.inject.Inject;
@@ -23,8 +22,6 @@ public class SplashActivity extends AppCompatActivity {
     @Inject
     SplashPresenter presenter;
 
-    public static final String taskList = "list";
-
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
@@ -39,9 +36,8 @@ public class SplashActivity extends AppCompatActivity {
         presenter.startTaskList();
     }
 
-    void gotoTaskList(AllTasks tasks) {
+    void gotoTaskList() {
         Intent intent = new Intent(this, TaskListContainer.class);
-        intent.putExtra(taskList, tasks);
         startActivity(intent);
         finish();
     }
