@@ -2,12 +2,14 @@ package com.example.ahmed.simpdo.presentation.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
+import com.example.ahmed.simpdo.R;
 import com.example.ahmed.simpdo.data.model.Task;
 import com.example.ahmed.simpdo.utils.AppConstants;
 
@@ -67,13 +69,22 @@ public class ViewTaskFragment extends DialogFragment {
             Log.d("ViewTaskFragment", "Task Fragment");
         }
 
-        return dialog.setTitle("Task Details")
+        AlertDialog alertDialog = dialog.setTitle("Task Details")
                 .setMessage(taskString)
                 //dismiss dialog
                 .setPositiveButton("Cancel", (dialogInterface, i) -> dismiss())
                 //edit callBack
                 .setNegativeButton("Edit", (dialogInterface, i) -> editTask(task))
                 .create();
+
+        alertDialog.setOnShowListener(dialogInterface -> {
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                    .setTextColor(getResources().getColor(R.color.colorAccent));
+            alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                    .setTextColor(getResources().getColor(R.color.colorAccent));
+        });
+
+        return alertDialog;
     }
 
 

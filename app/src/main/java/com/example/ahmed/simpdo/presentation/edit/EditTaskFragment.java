@@ -139,7 +139,7 @@ public class EditTaskFragment extends DialogFragment {
         setUpRepeatTaskSpinner();
         setUpAlarmTimeSpinner();
 
-         return dialog.setView(view)
+        AlertDialog alertDialog = dialog.setView(view)
                 .setTitle("Edit Task")
                 .setPositiveButton("Delete", (dialogInterface, i) -> {
                     if (currentTask.getRepeatCategory() == 0){
@@ -154,6 +154,15 @@ public class EditTaskFragment extends DialogFragment {
                     callBack.updateView(currentTask);
                 }))
                 .create();
+
+        alertDialog.setOnShowListener(dialogInterface -> {
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                    .setTextColor(getResources().getColor(R.color.colorAccent));
+            alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+                    .setTextColor(getResources().getColor(R.color.colorAccent));
+        });
+
+        return alertDialog;
     }
 
     private void showDeleteAllDialog() {

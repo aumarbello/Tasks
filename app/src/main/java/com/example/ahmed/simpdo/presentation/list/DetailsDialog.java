@@ -2,6 +2,7 @@ package com.example.ahmed.simpdo.presentation.list;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -87,8 +88,7 @@ public class DetailsDialog extends DialogFragment {
 
         setUpRepeatTasks();
         setUpAlarmTime();
-
-        return dialog.setTitle("Input Task Details")
+        AlertDialog alertDialog = dialog.setTitle("Input Task Details")
                 .setView(view)
                 .setPositiveButton("Submit", ((dialogInterface, i) -> {
                     String taskTitle = titleView.getText().toString();
@@ -98,6 +98,12 @@ public class DetailsDialog extends DialogFragment {
                             repeatCategory, alarmTimeSelected);
                 }))
                 .create();
+
+        alertDialog.setOnShowListener(dialogInterface ->
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                .setTextColor(getResources().getColor(R.color.colorAccent)));
+
+        return alertDialog;
     }
 
     private void setUpAlarmTime() {
