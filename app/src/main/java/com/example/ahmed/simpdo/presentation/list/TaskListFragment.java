@@ -99,18 +99,19 @@ public class TaskListFragment extends BackgroundFragment implements
         Bundle args = getArguments();
         allTasks = new AllTasks();
 
-        if (args != null){
-            allTasks = (AllTasks) getArguments().getSerializable
-                    (SplashActivity.taskList);
-            Log.d(TAG, "Reading from arguments");
-        }else if (savedInstance != null){
-            allTasks = (AllTasks) savedInstance.getSerializable(TAG);
-            Log.d(TAG, "Reading from saved instance");
-        }else{
+//        if (args != null){
+//            allTasks = (AllTasks) getArguments().getSerializable
+//                    (SplashActivity.taskList);
+//            Log.d(TAG, "Reading from arguments");
+//        }else if (savedInstance != null){
+//            allTasks = (AllTasks) savedInstance.getSerializable(TAG);
+//            Log.d(TAG, "Reading from saved instance");
+//        }else{
+            // TODO: 10/27/17 call from background to add weekly, monthly and yearly tasks
             taskList = presenter.getAllTasks();
             allTasks.setTaskList(taskList);
             Log.d(TAG, "Reading from database");
-        }
+//        }
 
 
 

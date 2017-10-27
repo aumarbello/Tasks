@@ -70,18 +70,10 @@ public class CalenderFragment extends Fragment
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         ((App)getActivity().getApplication()).getComponent().inject(this);
-        AllTasks tasks = (AllTasks) getArguments().getSerializable
-                (SplashActivity.taskList);
-        if (tasks != null){
-            taskList = tasks.getTaskList();
-            Log.d(TAG, "Reading taskList from arguments");
-        }else {
-            TaskDAO dao = new TaskDAO(getActivity());
-            dao.open();
-            taskList = dao.getAllNormalTasks();
-            dao.close();
-            Log.d(TAG, "Reading taskList from database directly");
-        }
+         TaskDAO dao = new TaskDAO(getActivity());
+        dao.open();
+        taskList = dao.getAllNormalTasks();
+        dao.close();
         DatePicker picker = new DatePicker(getActivity());
         timeInMillSecs = picker.getMaxDate();
     }
