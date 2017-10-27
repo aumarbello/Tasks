@@ -11,7 +11,7 @@ import javax.inject.Inject;
  * Created by ahmed on 9/24/17.
  */
 
-class CalenderPresenter {
+public class CalenderPresenter {
     private TaskDAO dao;
 
     @Inject
@@ -54,15 +54,20 @@ class CalenderPresenter {
         }
     }
 
-    List<Task> getWeeklyTasks(){
+    public List<Task> getWeeklyTasks(){
         return dao.getAllWeeklyTasks();
     }
 
-    List<Task> getMonthlyTasks(){
+    public List<Task> getMonthlyTasks(){
         return dao.getAllMonthlyTasks();
     }
 
-    List<Task> getYearlyTasks(){
+    public List<Task> getYearlyTasks(){
         return dao.getAllYearlyTasks();
+    }
+
+
+    public List<Task> getNormalTasks() {
+        return dao.getAllNormalTasks();
     }
 }

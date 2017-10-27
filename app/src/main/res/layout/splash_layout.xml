@@ -9,13 +9,13 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
         android:layout_centerInParent="true"
-        android:src="@drawable/logo"/>
+        android:src="@drawable/ic_today_black_24dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:text="@string/bottom_text"
         android:textSize="20sp"
         android:gravity="center"/>

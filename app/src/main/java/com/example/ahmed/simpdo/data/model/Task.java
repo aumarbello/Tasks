@@ -139,6 +139,8 @@ public class Task implements Serializable{
         if ((object == null) || (object.getClass() != Task.class))
             return false;
         Task task = (Task) object;
-        return this.getTaskID().equals(task.getTaskID());
+        return taskID.equals(task.getTaskID())
+                && taskTitle.equals(task.getTaskTitle())
+                && taskDate.equals(task.getTaskDate());
     }
 }

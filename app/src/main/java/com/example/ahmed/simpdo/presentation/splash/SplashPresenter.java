@@ -1,10 +1,8 @@
 package com.example.ahmed.simpdo.presentation.splash;
 
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.example.ahmed.simpdo.data.db.TaskDAO;
-import com.example.ahmed.simpdo.data.model.AllTasks;
 import com.example.ahmed.simpdo.data.model.Task;
 import com.example.ahmed.simpdo.utils.RxUtils;
 
@@ -23,7 +21,6 @@ public class SplashPresenter {
     private SplashActivity splashActivity;
     private final int Splash_Time_Out = 3000;
     private TaskDAO taskDAO;
-    private AllTasks allTasks;
 
     @Inject
     SplashPresenter(TaskDAO taskDAO){
@@ -34,49 +31,36 @@ public class SplashPresenter {
         this.splashActivity = splashActivity;
     }
     void startTaskList(){
-        allTasks = new AllTasks();
-        List<Task> taskList = getTasks();
-        allTasks.setTaskList(taskList);
         Observable.create(emitter -> {
             SystemClock.sleep(Splash_Time_Out);
             emitter.onNext(5);
             emitter.onComplete();
         }).compose(RxUtils.applySchedulers()).subscribe(observer ->
-                splashActivity.gotoTaskList(allTasks));
+                splashActivity.gotoTaskList());
     }
 
-    private List<Task> getTasks(){
+    private void shuffleTaskList(){
         List<Task> normalTasks = taskDAO.getAllNormalTasks();
         List<Task> weeklyTasks = taskDAO.getAllWeeklyTasks();
         List<Task> monthlyTasks = taskDAO.getAllMonthlyTasks();
         List<Task> yearlyTasks = taskDAO.getAllYearlyTasks();
 
         List<Task> returnList = new ArrayList<>(normalTasks);
-        Log.d("Splash", "Initial Size with normal list - "+ returnList.size());
-        for (Task task : weeklyTasks) {
-            if (!normalTasks.contains(task)){
-                //todo override equals method of tasks
-                returnList.add(task);
-                taskDAO.addNormalTask(task);
-            }
-        }
-        Log.d("Splash", "After weekly - "+ returnList.size());
-        for (Task task : monthlyTasks) {
-            if (!normalTasks.contains(task)){
-                //todo override equals method of tasks
-                returnList.add(task);
-                taskDAO.addNormalTask(task);
-            }
-        }
-        Log.d("Splash", "After monthly - "+ returnList.size());
-        for (Task task : yearlyTasks) {
-            if (!normalTasks.contains(task)){
-                //todo override equals method of tasks
-                returnList.add(task);
-                taskDAO.addNormalTask(task);
-            }
-        }
-        Log.d("Splash", "After yearly - "+ returnList.size());
-        return returnList;
+
+        weeklyTasks.stream().filter
+                (task -> !normalTasks.contains(task)).forEach(task -> {
+            returnList.add(task);
+            taskDAO.addNormalTask(task);
+        });
+        monthlyTasks.stream().filter
+                (task -> !normalTasks.contains(task)).forEach(task -> {
+            returnList.add(task);
+            taskDAO.addNormalTask(task);
+        });
+        yearlyTasks.stream().
+                filter(task -> !normalTasks.contains(task)).forEach(task -> {
+            returnList.add(task);
+            taskDAO.addNormalTask(task);
+        });
     }
 }
