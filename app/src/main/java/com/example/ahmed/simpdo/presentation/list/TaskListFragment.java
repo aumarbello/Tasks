@@ -1,6 +1,5 @@
 package com.example.ahmed.simpdo.presentation.list;
 
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -24,12 +23,11 @@ import android.widget.TimePicker;
 
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
-import com.example.ahmed.simpdo.data.model.AllTasks;
 import com.example.ahmed.simpdo.data.model.Task;
 import com.example.ahmed.simpdo.data.pref.TaskPref;
 import com.example.ahmed.simpdo.presentation.edit.EditTaskFragment;
+import com.example.ahmed.simpdo.presentation.list.calender.CalenderPresenter;
 import com.example.ahmed.simpdo.presentation.settings.SettingsActivity;
-import com.example.ahmed.simpdo.presentation.splash.SplashActivity;
 import com.example.ahmed.simpdo.presentation.view.ViewTaskFragment;
 
 import java.util.ArrayList;
@@ -62,6 +60,9 @@ public class TaskListFragment extends BackgroundFragment implements
     @Inject
     TaskPref preferences;
 
+    @Inject
+    CalenderPresenter calenderPresenter;
+
     private GetTaskList getTaskList;
     private Unbinder unbinder;
     private SectionedRecyclerViewAdapter adapter;
@@ -75,7 +76,6 @@ public class TaskListFragment extends BackgroundFragment implements
     private final static String TAG = "TaskList";
     private int daysSectionValue;
     private List<String> dayString;
-    private AllTasks allTasks;
     private Task task;
     private Callback callback;
     private List<Task> taskList;
@@ -94,26 +94,10 @@ public class TaskListFragment extends BackgroundFragment implements
         ((App)getActivity().getApplication()).getComponent().inject(this);
         adapter = new SectionedRecyclerViewAdapter();
         task = new Task();
-        taskList = new ArrayList<>();
 
-        Bundle args = getArguments();
-        allTasks = new AllTasks();
-
-//        if (args != null){
-//            allTasks = (AllTasks) getArguments().getSerializable
-//                    (SplashActivity.taskList);
-//            Log.d(TAG, "Reading from arguments");
-//        }else if (savedInstance != null){
-//            allTasks = (AllTasks) savedInstance.getSerializable(TAG);
-//            Log.d(TAG, "Reading from saved instance");
-//        }else{
-            // TODO: 10/27/17 call from background to add weekly, monthly and yearly tasks
-            taskList = presenter.getAllTasks();
-            allTasks.setTaskList(taskList);
-            Log.d(TAG, "Reading from database");
-//        }
-
-
+        // TODO: 10/27/17 call from background to add weekly, monthly and yearly tasks
+        taskList = calenderPresenter.getNormalTasks();
+        Log.d(TAG, "Reading from database");
 
         int numberOfDaysPref = preferences.getDaysSection();
 
@@ -132,7 +116,7 @@ public class TaskListFragment extends BackgroundFragment implements
                 daysSectionValue = 7;
                 break;
         }
-        getTaskList = new GetTaskList(numberOfDaysPref, allTasks.getTaskList());
+        getTaskList = new GetTaskList(numberOfDaysPref, taskList);
         populateDayStrings();
     }
 
@@ -372,7 +356,6 @@ public class TaskListFragment extends BackgroundFragment implements
         TaskSection currentSection = (TaskSection) adapter.getSection(sectionTag);
         currentSection.addTaskToList(task);
         taskList.add(task);
-        allTasks.setTaskList(taskList);
 
         Log.d(TAG, "Current Section is - " + currentSection.getSectionTitle());
         int items = currentSection.getContentItemsTotal();
@@ -445,11 +428,6 @@ public class TaskListFragment extends BackgroundFragment implements
         if (preferences.isPreviousTaskShown()){
             dayString.add("Previous");
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstance){
-        savedInstance.putSerializable(TAG, allTasks);
     }
 
     private class RepeatOp extends AsyncTask<Task, Void, Void>{

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,11 @@ import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.example.ahmed.simpdo.App;
 import com.example.ahmed.simpdo.R;
-import com.example.ahmed.simpdo.data.db.TaskDAO;
-import com.example.ahmed.simpdo.data.model.AllTasks;
 import com.example.ahmed.simpdo.data.model.Task;
 import com.example.ahmed.simpdo.data.pref.TaskPref;
 import com.example.ahmed.simpdo.presentation.edit.EditTaskFragment;
 import com.example.ahmed.simpdo.presentation.list.ItemActions;
 import com.example.ahmed.simpdo.presentation.list.TaskViewHolder;
-import com.example.ahmed.simpdo.presentation.splash.SplashActivity;
 import com.example.ahmed.simpdo.presentation.view.ViewTaskFragment;
 
 import java.text.SimpleDateFormat;
@@ -70,10 +66,8 @@ public class CalenderFragment extends Fragment
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         ((App)getActivity().getApplication()).getComponent().inject(this);
-         TaskDAO dao = new TaskDAO(getActivity());
-        dao.open();
-        taskList = dao.getAllNormalTasks();
-        dao.close();
+
+        taskList = presenter.getNormalTasks();
         DatePicker picker = new DatePicker(getActivity());
         timeInMillSecs = picker.getMaxDate();
     }
