@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,7 +35,7 @@ import butterknife.Unbinder;
 /**
  * Created by ahmed on 8/24/17.
  */
-
+@SuppressWarnings("deprecation")
 public class EditTaskFragment extends DialogFragment {
     public interface CallBack{
         void updateView(Task task);
@@ -99,18 +98,9 @@ public class EditTaskFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstance){
-        AlertDialog.Builder dialog;
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            dialog  = new AlertDialog.Builder(getActivity(),
-                    android.R.style.Theme_Material_Light_Dialog_Alert);
-        }else {
-            dialog = new AlertDialog.Builder(getActivity());
-        }
-
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-
-        View view = inflater.inflate(R.layout.edit_task_layout, null, false);
+        View view = View.inflate(getActivity(), R.layout.edit_task_layout, null);
         unbinder = ButterKnife.bind(this, view);
         if (savedInstance != null){
             String title = savedInstance.getString(TASK_TITLE);
@@ -286,7 +276,6 @@ public class EditTaskFragment extends DialogFragment {
         DatePickerDialog dateDialog;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             dateDialog = new DatePickerDialog(getActivity(),
-                    android.R.style.Theme_Material_Light_Dialog_Alert,
                     (datePicker, year, month, day) -> {
                         newCalender.set(year, month, day);
                         dateView.setText(dateString(newCalender));
@@ -317,7 +306,6 @@ public class EditTaskFragment extends DialogFragment {
     private void openTimeDialog(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             TimePickerDialog timeDialog = new TimePickerDialog(getActivity(),
-                    android.R.style.Theme_Material_Light_Dialog_Alert,
                     (timePicker, hour, minute) -> {
                         newCalender.set(Calendar.HOUR_OF_DAY, hour);
                         newCalender.set(Calendar.MINUTE, minute);

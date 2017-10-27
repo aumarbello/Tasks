@@ -3,7 +3,6 @@ package com.example.ahmed.simpdo.presentation.list;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -22,7 +21,7 @@ import butterknife.Unbinder;
 /**
  * Created by ahmed on 8/28/17.
  */
-
+@SuppressWarnings("deprecation")
 public class DetailsDialog extends DialogFragment {
     interface DetailsCallBack{
         void showCalenderDialog(String title, String description,
@@ -78,13 +77,7 @@ public class DetailsDialog extends DialogFragment {
             descView.setText(desc);
         }
 
-        AlertDialog.Builder dialog;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            dialog  = new AlertDialog.Builder(getActivity(),
-                    android.R.style.Theme_Material_Light_Dialog_Alert);
-        }else {
-            dialog = new AlertDialog.Builder(getActivity());
-        }
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
 
         setUpRepeatTasks();
         setUpAlarmTime();

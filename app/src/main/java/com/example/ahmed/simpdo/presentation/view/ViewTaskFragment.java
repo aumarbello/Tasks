@@ -3,7 +3,6 @@ package com.example.ahmed.simpdo.presentation.view;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -16,7 +15,7 @@ import com.example.ahmed.simpdo.utils.AppConstants;
 /**
  * Created by ahmed on 8/24/17.
  */
-
+@SuppressWarnings("deprecation")
 public class ViewTaskFragment extends DialogFragment {
     public ViewTaskFragment(){
     }
@@ -54,14 +53,7 @@ public class ViewTaskFragment extends DialogFragment {
                 (AppConstants.ADD_VIEW_EXTRA);
 
         position = getArguments().getInt(POSITION);
-        AlertDialog.Builder dialog;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            dialog  = new AlertDialog.Builder(getActivity(),
-                    android.R.style.Theme_Material_Light_Dialog_Alert);
-        }else {
-            dialog = new AlertDialog.Builder(getActivity());
-        }
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
 
         String taskString = task == null ? "" : task.toString();
 

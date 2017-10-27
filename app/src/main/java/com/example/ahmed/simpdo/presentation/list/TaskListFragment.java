@@ -95,7 +95,6 @@ public class TaskListFragment extends BackgroundFragment implements
         adapter = new SectionedRecyclerViewAdapter();
         task = new Task();
 
-        // TODO: 10/27/17 call from background to add weekly, monthly and yearly tasks
         taskList = calenderPresenter.getNormalTasks();
         Log.d(TAG, "Reading from database");
 
@@ -231,7 +230,6 @@ public class TaskListFragment extends BackgroundFragment implements
     private void showCalender(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             dateDialog = new DatePickerDialog(getActivity(),
-                    android.R.style.Theme_Material_Light_Dialog_Alert,
                     (datePicker, year, month, day) -> {
                         taskCalender.set(year, month, day);
                         dateDialog.dismiss();
@@ -258,6 +256,7 @@ public class TaskListFragment extends BackgroundFragment implements
 
             });
         }
+
         dateDialog.setTitle("Select Task Date");
         dateDialog.show();
     }
@@ -265,7 +264,6 @@ public class TaskListFragment extends BackgroundFragment implements
     private void showTimePicker() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             TimePickerDialog timeDialog = new TimePickerDialog(getActivity(),
-                    android.R.style.Theme_Material_Light_Dialog_Alert,
                     (timePicker, hour, minute) -> {
                         taskCalender.set(Calendar.HOUR_OF_DAY, hour);
                         taskCalender.set(Calendar.MINUTE, minute);
