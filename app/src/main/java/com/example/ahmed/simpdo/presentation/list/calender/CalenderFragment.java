@@ -268,6 +268,7 @@ public class CalenderFragment extends Fragment
             List<Task> taskList = new ArrayList<>(presenter.getWeeklyTasks());
             taskList.addAll(presenter.getMonthlyTasks());
             taskList.addAll(presenter.getYearlyTasks());
+            //todo add tasks to the existing tasklist
             for (Task task : taskList) {
                 Calendar taskCalender = task.getTaskDate();
                 Calendar repeatCalender = Calendar.getInstance();

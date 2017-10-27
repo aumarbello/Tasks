@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -67,8 +66,7 @@ public class DetailsDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle inState){
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view = inflater.inflate(R.layout.task_details_layout, null, false);
+        View view = View.inflate(getActivity(), R.layout.task_details_layout, null);
         unbinder = ButterKnife.bind(this, view);
 
         if (inState != null){
