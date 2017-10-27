@@ -52,7 +52,7 @@ public class CalenderFragment extends Fragment
     private CalenderAdapter adapter;
     private EditTaskFragment editTaskFragment;
     private int position;
-    private List<EventDay> eventDays;
+    private List<EventDay> eventDayList;
     private long timeInMillSecs;
 
     @Inject
@@ -138,7 +138,7 @@ public class CalenderFragment extends Fragment
     }
 
     private void selectTaskDays(){
-        eventDays = new ArrayList<>();
+        eventDayList = new ArrayList<>();
         for (Task task : taskList) {
             Calendar taskCalender = task.getTaskDate();
             DatePicker picker = new DatePicker(getActivity());
@@ -149,10 +149,8 @@ public class CalenderFragment extends Fragment
             int currentYear = taskCalender.get(Calendar.YEAR);
             int maxYear =  repeatCalender.get(Calendar.YEAR);
 
-            eventDays.add(new EventDay(task.getTaskDate(), R.drawable.todo));
+            eventDayList.add(new EventDay(task.getTaskDate(), R.drawable.todo));
         }
-        Log.d(TAG, "Setting event day's - for - " + eventDays.size());
-        calendarView.setEvents(eventDays);
     }
 
     private String getTaskTime(Calendar calendar){
@@ -265,11 +263,14 @@ public class CalenderFragment extends Fragment
     private class OtherEvents extends AsyncTask<Void, Void, List<EventDay>>{
         @Override
         protected List<EventDay> doInBackground(Void... voids) {
-            List<Task> taskList = new ArrayList<>(presenter.getWeeklyTasks());
-            taskList.addAll(presenter.getMonthlyTasks());
-            taskList.addAll(presenter.getYearlyTasks());
-            //todo add tasks to the existing tasklist
-            for (Task task : taskList) {
+//            List<Task> tasks = new ArrayList<>(presenter.getWeeklyTasks());
+            List<Task> tasks = new ArrayList<>();
+            tasks.addAll(presenter.getMonthlyTasks());
+            tasks.addAll(presenter.getYearlyTasks());
+
+            taskList.addAll(tasks);
+
+            for (Task task : tasks) {
                 Calendar taskCalender = task.getTaskDate();
                 Calendar repeatCalender = Calendar.getInstance();
                 repeatCalender.setTimeInMillis(timeInMillSecs);
@@ -278,15 +279,14 @@ public class CalenderFragment extends Fragment
                 int currentYear = taskCalender.get(Calendar.YEAR);
                 int maxYear =  repeatCalender.get(Calendar.YEAR);
 
-                eventDays.add(new EventDay(task.getTaskDate(), R.drawable.todo));
+                eventDayList.add(new EventDay(task.getTaskDate(), R.drawable.todo));
             }
-            return eventDays;
+            return eventDayList;
         }
         @Override
         protected void onPostExecute(List<EventDay> eventDays){
-            List<EventDay> eventDayList = new ArrayList<>();
+            eventDayList.addAll(eventDays);
             calendarView.setEvents(eventDayList);
-            calendarView.setEvents(eventDays);
         }
     }
 }
